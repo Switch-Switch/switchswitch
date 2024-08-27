@@ -1,0 +1,3 @@
+rootProject.name = 'switchswithch'
+include 'member-service'
+include 'crawling-service'

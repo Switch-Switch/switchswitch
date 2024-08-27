@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: switchswitchcrawling
+  main:
+    web-application-type: none
+  config:
+    import:
+      - application-db.yml
+      - application-crawling.yml
+

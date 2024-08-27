@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+repositories {
+    mavenCentral()
+}
+
+bootJar { enabled = false }
+jar { enabled = true }
+
+subprojects {
+    group = 'com.rljj'
+    version = '0.0.1'
+    sourceCompatibility = '17'
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies { // 모든 하위 모듈에 추가 될 의존성 목록입니다.
+        implementation 'org.springframework.boot:spring-boot-starter'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    ext {
+        set('springCloudVersion', "2023.0.0")
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+project(':member-service') {
+}
