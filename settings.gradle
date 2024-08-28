@@ -1,3 +1,5 @@
 rootProject.name = 'switchswithch'
 include 'member-service'
 include 'crawling-service'
+include 'api-gateway'
+include 'eureka-server'
