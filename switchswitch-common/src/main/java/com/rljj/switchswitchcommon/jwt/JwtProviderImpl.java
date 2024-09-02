@@ -1,7 +1,5 @@
-package com.rljj.switchswitchmemberservice.global.config.jwt;
+package com.rljj.switchswitchcommon.jwt;
 
-import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
-import com.rljj.switchswitchmemberservice.domain.member.service.MemberService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -9,10 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
@@ -23,21 +18,14 @@ import java.util.Date;
 @Component
 public class JwtProviderImpl implements JwtProvider {
 
-    @Value("${jwt.expired.access-token}")
-    private long accessTokenExpireTime;
-
-    @Value("${jwt.expired.refresh-token}")
-    private long refreshTokenExpireTime;
-
-    @Value("${JWT.SECRET}")
-    private String secretKey;
+    private final long accessTokenExpireTime;
+    private final long refreshTokenExpireTime;
+    private final String secretKey;
 
     private final String TOKEN_KEY = "jwt";
 
     public final String GRANT_TYPE = "Bearer ";
 
-
-    private final MemberService memberService;
 
     @Override
     public JwtSet generateTokenSet(String name) {
@@ -121,20 +109,6 @@ public class JwtProviderImpl implements JwtProvider {
         cookie.setMaxAge((int) accessTokenExpireTime);
         cookie.setPath("/");
         response.addCookie(cookie);
-    }
-
-    @Override
-    @Transactional
-    public String refreshAuthorization(String accessToken, HttpServletResponse response) {
-        String username = parseSubjectWithoutSecure(accessToken);
-        Member member = memberService.getMemberByName(username);
-        String refreshToken = member.getMemberRefreshToken().getRefreshToken();
-        if (isExpired(refreshToken)) { // 재로그인
-            throw new BadCredentialsException("Refresh token expired");
-        }
-        accessToken = generateToken(member.getName(), accessTokenExpireTime);
-        setJwtInCookie(accessToken, response);
-        return accessToken;
     }
 
     @Override

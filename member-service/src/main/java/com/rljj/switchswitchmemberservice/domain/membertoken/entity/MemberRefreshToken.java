@@ -1,7 +1,7 @@
 package com.rljj.switchswitchmemberservice.domain.membertoken.entity;
 
+import com.rljj.switchswitchcommon.baseentity.BaseEntity;
 import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
-import com.rljj.switchswitchmemberservice.global.baseentity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;

@@ -3,7 +3,6 @@ package com.rljj.switchswitchmemberservice.domain.auth.controller;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.LoginRequest;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import com.rljj.switchswitchmemberservice.domain.auth.service.AuthService;
-import com.rljj.switchswitchmemberservice.global.config.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,11 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtProvider jwtProvider;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -30,6 +28,6 @@ public class AuthController {
 
     @GetMapping("/refresh/{jwt}")
     public ResponseEntity<String> refresh(@PathVariable("jwt") String jwt, HttpServletResponse response) {
-        return new ResponseEntity<>(jwtProvider.refreshAuthorization(jwt, response), HttpStatus.OK);
+        return new ResponseEntity<>(authService.refreshAuthorization(jwt, response), HttpStatus.OK);
     }
 }

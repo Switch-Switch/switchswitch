@@ -1,8 +1,11 @@
 package com.rljj.switchswitchmemberservice.domain.member.entity;
 
+import com.rljj.switchswitchcommon.baseentity.BaseEntity;
 import com.rljj.switchswitchmemberservice.domain.membertoken.entity.MemberRefreshToken;
-import com.rljj.switchswitchmemberservice.global.baseentity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 
 @Getter

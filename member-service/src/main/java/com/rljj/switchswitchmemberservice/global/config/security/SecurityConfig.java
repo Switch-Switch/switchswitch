@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthLogoutHandler logoutHandler;
-    private final String[] permittedUrls = {"/auth/**"};
+    private final String[] permittedUrls = {"/api/auth/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSession httpSession) throws Exception {

@@ -1,9 +1,9 @@
 package com.rljj.switchswitchmemberservice.domain.auth.service;
 
+import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
 import com.rljj.switchswitchmemberservice.domain.member.service.MemberService;
 import com.rljj.switchswitchmemberservice.domain.membertoken.service.MemberRefreshTokenService;
-import com.rljj.switchswitchmemberservice.global.config.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

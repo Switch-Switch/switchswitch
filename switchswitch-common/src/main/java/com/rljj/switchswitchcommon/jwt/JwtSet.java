@@ -1,4 +1,4 @@
-package com.rljj.switchswitchmemberservice.global.config.jwt;
+package com.rljj.switchswitchcommon.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
