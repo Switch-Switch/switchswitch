@@ -1,4 +1,4 @@
-package com.rljj.switchswitchmemberservice.global.config.exception;
+package com.rljj.switchswitchcommon.exception;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 

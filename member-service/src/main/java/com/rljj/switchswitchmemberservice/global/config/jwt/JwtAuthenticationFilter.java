@@ -1,5 +1,7 @@
 package com.rljj.switchswitchmemberservice.global.config.jwt;
 
+import com.rljj.switchswitchcommon.jwt.JwtProvider;
+import com.rljj.switchswitchmemberservice.domain.auth.service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtProvider jwtProvider;
+    private final AuthService authService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -36,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (jwtProvider.isExpired(jwt)) {
-            jwt = jwtProvider.refreshAuthorization(jwt, response);
+            jwt = authService.refreshAuthorization(jwt, response);
         }
 
         String username = jwtProvider.parseSubject(jwt);

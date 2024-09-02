@@ -56,5 +56,14 @@ subprojects {
     }
 }
 
+project(':api-gateway') {
+    dependencies {
+        implementation project(':switchswitch-common')
+    }
+}
+
 project(':member-service') {
+    dependencies {
+        implementation project(':switchswitch-common')
+    }
 }

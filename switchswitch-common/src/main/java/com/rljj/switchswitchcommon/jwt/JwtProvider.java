@@ -1,4 +1,4 @@
-package com.rljj.switchswitchmemberservice.global.config.jwt;
+package com.rljj.switchswitchcommon.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,8 +26,6 @@ public interface JwtProvider {
     boolean isExpired(String jwt);
 
     void setJwtInCookie(String accessToken, HttpServletResponse response);
-
-    String refreshAuthorization(String jwt, HttpServletResponse response);
 
     void expireJwtInCookie(HttpServletResponse response);
 }

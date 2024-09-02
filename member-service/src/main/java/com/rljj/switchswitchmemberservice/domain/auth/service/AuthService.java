@@ -8,4 +8,6 @@ public interface AuthService {
     String login(LoginRequest loginRequest, HttpServletResponse response);
 
     String signup(SignupRequest signupRequest, HttpServletResponse response);
+
+    String refreshAuthorization(String accessToken, HttpServletResponse response);
 }

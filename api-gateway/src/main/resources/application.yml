@@ -6,11 +6,12 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: member-service
-          uri: lb://MEMBER-SERVICE
-          predicates:
-            - Path=/auth/**
+      mvc:
+        routes:
+          - id: member-service
+            uri: lb://MEMBER-SERVICE
+            predicates:
+              - Path=/api/auth/**
 
 eureka:
   client:

@@ -1,9 +1,9 @@
 package com.rljj.switchswitchmemberservice.domain.member.service;
 
+import com.rljj.switchswitchcommon.exception.UserNotFoundException;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
 import com.rljj.switchswitchmemberservice.domain.member.repository.MemberRepository;
-import com.rljj.switchswitchmemberservice.global.config.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
