@@ -19,12 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final MemberService memberService;
 
     /**
-     * @param username Member's name
+     * @param username Member's id
      * @throws UsernameNotFoundException Member Not Found (404)
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberService.getMemberByName(username);
-        return new User(member.getName(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        Member member = memberService.getMember(Long.parseLong(username));
+        return new User(String.valueOf(member.getId()), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

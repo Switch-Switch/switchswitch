@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public String login(LoginRequest loginRequest, HttpServletResponse response) {
         Member member = memberService.getMemberByName(loginRequest.getName());
-        authenticate(loginRequest);
+        authenticate(loginRequest, member);
         return handleJwt(response, member);
     }
 
@@ -55,26 +55,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public String refreshAuthorization(String accessToken, HttpServletResponse response) {
-        String username = jwtProvider.parseSubjectWithoutSecure(accessToken);
-        Member member = memberService.getMemberByName(username);
+        Long memberId = jwtProvider.parseMemberIdWithoutSecure(accessToken);
+        Member member = memberService.getMember(memberId);
         String refreshToken = member.getMemberRefreshToken().getRefreshToken();
         if (jwtProvider.isExpired(refreshToken)) { // 재로그인
             throw new BadCredentialsException("Refresh token expired");
         }
-        accessToken = jwtProvider.generateToken(member.getName(), accessTokenExpireTime);
+        accessToken = jwtProvider.generateToken(String.valueOf(member.getId()), accessTokenExpireTime);
         jwtProvider.setJwtInCookie(accessToken, response);
         return accessToken;
     }
 
-    private void authenticate(LoginRequest loginRequest) {
+    private void authenticate(LoginRequest loginRequest, Member member) {
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getName(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(member.getId(), loginRequest.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
     }
 
     private String handleJwt(HttpServletResponse response, Member member) {
-        JwtSet jwtSet = jwtProvider.generateTokenSet(member.getName());
+        JwtSet jwtSet = jwtProvider.generateTokenSet(member.getId());
         MemberRefreshToken memberRefreshToken = member.getMemberRefreshToken();
         if (memberRefreshToken != null) {
             memberRefreshToken.updateExpired();

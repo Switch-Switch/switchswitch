@@ -27,8 +27,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(permittedUrls).permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers(permittedUrls).permitAll()
+                        .requestMatchers("/api/auth/test").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .logout(logout -> logout.logoutUrl("/auth/logout")

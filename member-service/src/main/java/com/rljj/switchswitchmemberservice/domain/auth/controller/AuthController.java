@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -26,8 +28,13 @@ public class AuthController {
         return new ResponseEntity<>(authService.signup(signupRequest, response), HttpStatus.OK);
     }
 
-    @GetMapping("/refresh/{jwt}")
-    public ResponseEntity<String> refresh(@PathVariable("jwt") String jwt, HttpServletResponse response) {
+    @GetMapping("/refresh")
+    public ResponseEntity<String> refresh(@RequestParam("jwt") String jwt, HttpServletResponse response) {
         return new ResponseEntity<>(authService.refreshAuthorization(jwt, response), HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test(@AuthenticationPrincipal UserDetails userDetails) {
+        return new ResponseEntity<>(userDetails.getUsername(), HttpStatus.OK);
     }
 }

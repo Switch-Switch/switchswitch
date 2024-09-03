@@ -23,7 +23,8 @@ public class AuthLogoutHandler implements LogoutHandler {
     @Override
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Member member = memberService.getMemberByName(jwtProvider.parseSubject(request));
+        String jwt = jwtProvider.parseJwt(request);
+        Member member = memberService.getMember(jwtProvider.parseMemberId(jwt));
         member.setMemberRefreshToken(null);
         memberRefreshTokenService.delete(member);
         jwtProvider.expireJwtInCookie(response);
