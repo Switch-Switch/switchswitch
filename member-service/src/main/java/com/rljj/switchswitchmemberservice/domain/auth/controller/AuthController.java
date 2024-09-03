@@ -26,8 +26,8 @@ public class AuthController {
         return new ResponseEntity<>(authService.signup(signupRequest, response), HttpStatus.OK);
     }
 
-    @GetMapping("/refresh/{jwt}")
-    public ResponseEntity<String> refresh(@PathVariable("jwt") String jwt, HttpServletResponse response) {
+    @GetMapping("/refresh")
+    public ResponseEntity<String> refresh(@RequestParam("jwt") String jwt, HttpServletResponse response) {
         return new ResponseEntity<>(authService.refreshAuthorization(jwt, response), HttpStatus.OK);
     }
 }
