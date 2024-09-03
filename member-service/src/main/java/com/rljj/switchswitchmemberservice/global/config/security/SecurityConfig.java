@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .logout(logout -> logout.logoutUrl("/auth/logout")
+                .logout(logout -> logout.logoutUrl("/api/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(true)

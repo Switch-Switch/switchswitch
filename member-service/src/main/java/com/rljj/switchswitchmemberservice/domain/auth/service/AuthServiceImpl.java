@@ -1,19 +1,18 @@
 package com.rljj.switchswitchmemberservice.domain.auth.service;
 
 import com.rljj.switchswitchcommon.exception.DuplicatedException;
+import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtSet;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.LoginRequest;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
 import com.rljj.switchswitchmemberservice.domain.member.service.MemberService;
-import com.rljj.switchswitchmemberservice.domain.membertoken.entity.MemberRefreshToken;
-import com.rljj.switchswitchmemberservice.domain.membertoken.service.MemberRefreshTokenService;
+import com.rljj.switchswitchmemberservice.global.config.jwt.JwtRedisHandler;
 import com.rljj.switchswitchmemberservice.global.config.security.CustomAuthenticationManager;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +27,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final CustomAuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
-    private final MemberRefreshTokenService memberRefreshTokenService;
     private final MemberService memberService;
+    private final JwtRedisHandler jwtRedisHandler;
 
     @Value("${jwt.expired.access-token}")
     private long accessTokenExpireTime;
@@ -57,9 +56,9 @@ public class AuthServiceImpl implements AuthService {
     public String refreshAuthorization(String accessToken, HttpServletResponse response) {
         Long memberId = jwtProvider.parseMemberIdWithoutSecure(accessToken);
         Member member = memberService.getMember(memberId);
-        String refreshToken = member.getMemberRefreshToken().getRefreshToken();
-        if (jwtProvider.isExpired(refreshToken)) { // 재로그인
-            throw new BadCredentialsException("Refresh token expired");
+        String refreshToken = jwtRedisHandler.getRefreshToken(member.getId());
+        if (refreshToken == null || jwtProvider.isExpired(refreshToken)) { // 재로그인
+            throw new NotAuthorizationException("Refresh token expired", String.valueOf(member.getId()));
         }
         accessToken = jwtProvider.generateToken(String.valueOf(member.getId()), accessTokenExpireTime);
         jwtProvider.setJwtInCookie(accessToken, response);
@@ -75,13 +74,7 @@ public class AuthServiceImpl implements AuthService {
 
     private String handleJwt(HttpServletResponse response, Member member) {
         JwtSet jwtSet = jwtProvider.generateTokenSet(member.getId());
-        MemberRefreshToken memberRefreshToken = member.getMemberRefreshToken();
-        if (memberRefreshToken != null) {
-            memberRefreshToken.updateExpired();
-        } else {
-            member.setMemberRefreshToken(
-                    memberRefreshTokenService.createRefreshToken(member, jwtSet.getRefreshToken()));
-        }
+        jwtRedisHandler.setRefreshToken(member.getId(), jwtSet.getRefreshToken());
         jwtProvider.setJwtInCookie(jwtSet.getAccessToken(), response);
         return jwtSet.getAccessToken();
     }

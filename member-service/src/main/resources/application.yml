@@ -8,6 +8,10 @@ spring:
     import:
       - application-db.yml
       - application-secret.yml
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 eureka:
 #  instance:
