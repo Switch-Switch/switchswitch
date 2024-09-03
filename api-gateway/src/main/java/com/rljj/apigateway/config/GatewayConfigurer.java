@@ -1,4 +1,4 @@
-package com.rljj.apigateway.global.config;
+package com.rljj.apigateway.config;
 
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtProviderImpl;
