@@ -13,17 +13,20 @@ import org.springframework.stereotype.Component;
 public class JwtHandlerImpl implements JwtHandler {
 
     @Resource(name = "redisTemplate")
-    private final ValueOperations<String, String> valueOperations;
+    private ValueOperations<String, String> valueOperations;
 
     private final JwtProvider jwtProvider;
 
     @Value("${jwt.expired.access-token}")
     private long accessTokenExpireTime;
 
+    private final String BLOCKLIST_PREFIX = "blocklist:";
+    private final String REFRESHTOKEN_PREFIX = "refreshtoken:";
+
     @Override
     public String refreshAccessToken(String jwt) {
         String memberId = jwtProvider.parseSubject(jwt);
-        String refreshToken = valueOperations.get(memberId);
+        String refreshToken = valueOperations.get(REFRESHTOKEN_PREFIX + memberId);
         if (refreshToken == null || jwtProvider.isExpired(refreshToken)) {
             valueOperations.getAndDelete(memberId);
             throw new NotAuthorizationException("Refresh token is expired", memberId);
@@ -33,6 +36,7 @@ public class JwtHandlerImpl implements JwtHandler {
 
     @Override
     public boolean isBlockedToken(String jwt) {
-        return valueOperations.get(jwt) != null;
+        return valueOperations.get(BLOCKLIST_PREFIX + jwt) != null;
     }
+
 }
