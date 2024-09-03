@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.SecretKey;
 
 public interface JwtProvider {
-    JwtSet generateTokenSet(String name);
+    JwtSet generateTokenSet(String memberId);
 
     String generateToken(String subject, Long expired);
 

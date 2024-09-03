@@ -28,10 +28,10 @@ public class JwtProviderImpl implements JwtProvider {
 
 
     @Override
-    public JwtSet generateTokenSet(String name) {
+    public JwtSet generateTokenSet(String memberId) {
         return JwtSet.builder()
-                .accessToken(generateToken(name, accessTokenExpireTime))
-                .refreshToken(generateToken(name, refreshTokenExpireTime))
+                .accessToken(generateToken(memberId, accessTokenExpireTime))
+                .refreshToken(generateToken(memberId, refreshTokenExpireTime))
                 .build();
     }
 
