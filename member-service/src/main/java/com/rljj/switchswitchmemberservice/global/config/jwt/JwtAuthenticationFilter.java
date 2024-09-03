@@ -42,10 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwt = authService.refreshAuthorization(jwt, response);
         }
 
-        String username = jwtProvider.parseSubject(jwt);
+        String memberId = jwtProvider.parseSubject(jwt);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        if (memberId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(memberId);
             setSecurityContextHolder(userDetails);
         }
         filterChain.doFilter(request, response);

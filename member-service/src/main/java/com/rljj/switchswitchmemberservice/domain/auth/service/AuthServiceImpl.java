@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public String login(LoginRequest loginRequest, HttpServletResponse response) {
         Member member = memberService.getMemberByName(loginRequest.getName());
-        authenticate(loginRequest);
+        authenticate(loginRequest, member);
         return handleJwt(response, member);
     }
 
@@ -66,9 +66,9 @@ public class AuthServiceImpl implements AuthService {
         return accessToken;
     }
 
-    private void authenticate(LoginRequest loginRequest) {
+    private void authenticate(LoginRequest loginRequest, Member member) {
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getName(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(member.getId(), loginRequest.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
     }
