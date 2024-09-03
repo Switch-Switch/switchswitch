@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.SecretKey;
 
 public interface JwtProvider {
-    JwtSet generateTokenSet(String memberId);
+    JwtSet generateTokenSet(Long memberId);
 
     String generateToken(String subject, Long expired);
 
@@ -14,7 +14,9 @@ public interface JwtProvider {
 
     String parseSubject(String jwt);
 
-    String parseSubject(HttpServletRequest request);
+    Long parseMemberId(String jwt);
+
+    String parseJwt(HttpServletRequest request);
 
     /**
      * 만료 여부와 관계없이 JWT의 subject를 가져옴, 필요할 때만 사용하고 이외에는 parseSubject() 사용
@@ -22,6 +24,8 @@ public interface JwtProvider {
      * @return subject (사용자 이름, name)
      */
     String parseSubjectWithoutSecure(String jwt);
+
+    Long parseMemberIdWithoutSecure(String jwt);
 
     boolean isExpired(String jwt);
 

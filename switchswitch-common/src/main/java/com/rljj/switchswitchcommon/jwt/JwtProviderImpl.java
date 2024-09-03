@@ -1,5 +1,6 @@
 package com.rljj.switchswitchcommon.jwt;
 
+import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -28,10 +29,10 @@ public class JwtProviderImpl implements JwtProvider {
 
 
     @Override
-    public JwtSet generateTokenSet(String memberId) {
+    public JwtSet generateTokenSet(Long memberId) {
         return JwtSet.builder()
-                .accessToken(generateToken(memberId, accessTokenExpireTime))
-                .refreshToken(generateToken(memberId, refreshTokenExpireTime))
+                .accessToken(generateToken(String.valueOf(memberId), accessTokenExpireTime))
+                .refreshToken(generateToken(String.valueOf(memberId), refreshTokenExpireTime))
                 .build();
     }
 
@@ -60,17 +61,22 @@ public class JwtProviderImpl implements JwtProvider {
                     .getPayload()
                     .getSubject();
         } catch (ExpiredJwtException e) {
-            return e.getClaims().getSubject();
+            throw new NotAuthorizationException(e.getMessage(), e.getClaims().getSubject());
         }
     }
 
     @Override
-    public String parseSubject(HttpServletRequest request) {
+    public Long parseMemberId(String jwt) {
+        return Long.parseLong(parseSubject(jwt));
+    }
+
+    @Override
+    public String parseJwt(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (!StringUtils.hasText(authHeader) || !authHeader.startsWith(GRANT_TYPE)) {
             return null;
         }
-        return parseSubject(authHeader.substring(7));
+        return authHeader.substring(7);
     }
 
     @Override
@@ -85,6 +91,11 @@ public class JwtProviderImpl implements JwtProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims().getSubject();
         }
+    }
+
+    @Override
+    public Long parseMemberIdWithoutSecure(String jwt) {
+        return Long.parseLong(parseSubjectWithoutSecure(jwt));
     }
 
     @Override

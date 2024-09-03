@@ -55,13 +55,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public String refreshAuthorization(String accessToken, HttpServletResponse response) {
-        String username = jwtProvider.parseSubjectWithoutSecure(accessToken);
-        Member member = memberService.getMemberByName(username);
+        Long memberId = jwtProvider.parseMemberIdWithoutSecure(accessToken);
+        Member member = memberService.getMember(memberId);
         String refreshToken = member.getMemberRefreshToken().getRefreshToken();
         if (jwtProvider.isExpired(refreshToken)) { // 재로그인
             throw new BadCredentialsException("Refresh token expired");
         }
-        accessToken = jwtProvider.generateToken(member.getName(), accessTokenExpireTime);
+        accessToken = jwtProvider.generateToken(String.valueOf(member.getId()), accessTokenExpireTime);
         jwtProvider.setJwtInCookie(accessToken, response);
         return accessToken;
     }
@@ -74,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private String handleJwt(HttpServletResponse response, Member member) {
-        JwtSet jwtSet = jwtProvider.generateTokenSet(member.getName());
+        JwtSet jwtSet = jwtProvider.generateTokenSet(member.getId());
         MemberRefreshToken memberRefreshToken = member.getMemberRefreshToken();
         if (memberRefreshToken != null) {
             memberRefreshToken.updateExpired();
