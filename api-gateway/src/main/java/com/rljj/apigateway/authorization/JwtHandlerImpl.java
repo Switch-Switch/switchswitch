@@ -21,12 +21,12 @@ public class JwtHandlerImpl implements JwtHandler {
     private long accessTokenExpireTime;
 
     @Override
-    public String refreshAccessToken(String memberId) {
+    public String refreshAccessToken(String jwt) {
+        String memberId = jwtProvider.parseSubject(jwt);
         String refreshToken = valueOperations.get(memberId);
         if (jwtProvider.isExpired(refreshToken)) {
             throw new NotAuthorizationException("Refresh token is expired", memberId);
         }
-
         return jwtProvider.generateToken(memberId, accessTokenExpireTime);
     }
 
