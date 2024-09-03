@@ -1,5 +1,7 @@
 package com.rljj.switchswitchmemberservice.global.config.jwt;
 
+import com.rljj.switchswitchcommon.jwt.JwtProvider;
+import com.rljj.switchswitchcommon.jwt.JwtSet;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.Test;
@@ -40,16 +42,11 @@ public class JwtProviderTest {
     @Test
     public void testJWT() {
         //given
-        String givenId = "1";
+        Long givenId = 1L;
         JwtSet jwtSet = jwtProvider.generateTokenSet(givenId);
 
         //when
-        String resultId = Jwts.parser()
-                .verifyWith(jwtProvider.getSecretKey())
-                .build()
-                .parseSignedClaims(jwtSet.getAccessToken())
-                .getPayload()
-                .getSubject();
+        Long resultId = jwtProvider.parseMemberId(jwtSet.getAccessToken());
 
         //then
         assertThat(resultId).isEqualTo(givenId);
