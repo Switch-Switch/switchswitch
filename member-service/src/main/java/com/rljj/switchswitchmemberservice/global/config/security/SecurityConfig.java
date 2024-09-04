@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthLogoutHandler logoutHandler;
-    private final String[] permittedUrls = {"/api/auth/**"};
+    private final String[] permittedUrls = {"/api/auth/signup", "/api/auth/login"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSession httpSession) throws Exception {
@@ -28,11 +28,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(permittedUrls).permitAll()
-                        .requestMatchers("/api/auth/test").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .logout(logout -> logout.logoutUrl("/auth/logout")
+                .logout(logout -> logout.logoutUrl("/api/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(true)

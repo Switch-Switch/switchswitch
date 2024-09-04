@@ -5,6 +5,7 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-commons'
 	implementation 'jakarta.persistence:jakarta.persistence-api'
 	implementation 'org.springframework.data:spring-data-jpa'
+	implementation 'org.springframework.data:spring-data-redis'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 	compileOnly 'org.projectlombok:lombok'

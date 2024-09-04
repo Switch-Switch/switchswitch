@@ -32,4 +32,7 @@ public interface JwtProvider {
     void setJwtInCookie(String accessToken, HttpServletResponse response);
 
     void expireJwtInCookie(HttpServletResponse response);
+
+    long getAccessTokenExpireTime();
+    long getRefreshTokenExpireTime();
 }
