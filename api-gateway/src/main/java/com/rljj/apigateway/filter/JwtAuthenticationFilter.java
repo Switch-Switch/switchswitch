@@ -5,14 +5,18 @@ import com.rljj.apigateway.authorization.JwtHandler;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ServerWebExchange;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
 
@@ -28,9 +32,9 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-
-
-            String jwt = parseJwt(exchange.getRequest());
+            log.info("filter 진입>>>>>>>>>>");
+            ServerHttpRequest request = exchange.getRequest();
+            String jwt = extractTokenFromHeader(request.getHeaders());
 
             if (jwt == null || jwtHandler.isBlockedToken(jwt)) {
                 exchange.getResponse().setStatusCode(config.getUnauthorizedStatus());
@@ -39,6 +43,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
             if (jwtProvider.isExpired(jwt)) {
                 jwt = jwtHandler.refreshAccessToken(jwt);
+                setTokenInCookie(exchange, jwt);
             }
 
             String memberId = jwtProvider.parseSubject(jwt);
@@ -48,12 +53,20 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         };
     }
 
-    private String parseJwt(ServerHttpRequest request) {
-        String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+    private String extractTokenFromHeader(HttpHeaders headers) {
+        String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
             return null;
         }
         return authHeader.substring(7);
+    }
+
+    private void setTokenInCookie(ServerWebExchange exchange, String token) {
+        ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                .httpOnly(true)
+                .path("/")
+                .build();
+        exchange.getResponse().addCookie(cookie);
     }
 
     @Setter

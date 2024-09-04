@@ -9,10 +9,18 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: member-service
+        - id: member-service-auth
+          uri: lb://MEMBER-SERVICE
+          predicates:
+            - Path=/api/auth/login, /api/auth/signup
+          filters: []
+
+        - id: member-service-secure
           uri: lb://MEMBER-SERVICE
           predicates:
             - Path=/api/auth/**
+          filters: JwtAuthenticationFilter
+
   data:
     redis:
       host: localhost
