@@ -1,8 +1,8 @@
 package com.rljj.apigateway.filter;
 
-import com.rljj.apigateway.authorization.JwtHandler;
 //TODO import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
+import com.rljj.switchswitchcommon.jwt.JwtRedisService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,28 +21,28 @@ import org.springframework.web.server.ServerWebExchange;
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
 
     private final JwtProvider jwtProvider;
-    private final JwtHandler jwtHandler;
+    private final JwtRedisService jwtRedisService;
 
-    public JwtAuthenticationFilter(JwtProvider jwtProvider, JwtHandler jwtHandler) {
+    public JwtAuthenticationFilter(JwtProvider jwtProvider, JwtRedisService jwtRedisService) {
         super(Config.class);
         this.jwtProvider = jwtProvider;
-        this.jwtHandler = jwtHandler;
+        this.jwtRedisService = jwtRedisService;
     }
 
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            log.info("filter 진입>>>>>>>>>>");
+            log.info("filter start >>>>>>>>>>");
             ServerHttpRequest request = exchange.getRequest();
             String jwt = extractTokenFromHeader(request.getHeaders());
 
-            if (jwt == null || jwtHandler.isBlockedToken(jwt)) {
+            if (jwt == null || jwtRedisService.isBlockedAccessToken(jwt)) {
                 exchange.getResponse().setStatusCode(config.getUnauthorizedStatus());
                 return exchange.getResponse().setComplete();
             }
 
             if (jwtProvider.isExpired(jwt)) {
-                jwt = jwtHandler.refreshAccessToken(jwt);
+                jwt = jwtRedisService.refreshAccessToken(jwt);
                 setTokenInCookie(exchange, jwt);
             }
 
@@ -74,6 +74,5 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     public static class Config {
         // 설정이 필요한 경우 이 클래스에 추가 가능
         private HttpStatus unauthorizedStatus = HttpStatus.UNAUTHORIZED;
-
     }
 }

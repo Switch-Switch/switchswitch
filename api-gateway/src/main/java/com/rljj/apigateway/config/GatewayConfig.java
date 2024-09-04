@@ -2,12 +2,15 @@ package com.rljj.apigateway.config;
 
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtProviderImpl;
+import com.rljj.switchswitchcommon.jwt.JwtRedisService;
+import com.rljj.switchswitchcommon.jwt.JwtRedisServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 @Configuration
-public class GatewayConfigurer {
+public class GatewayConfig {
 
     @Value("${jwt.expired.access-token}")
     private long accessTokenExpireTime;
@@ -21,5 +24,10 @@ public class GatewayConfigurer {
     @Bean
     public JwtProvider jwtProvider() {
         return new JwtProviderImpl(accessTokenExpireTime, refreshTokenExpireTime, jwtSecretKey);
+    }
+
+    @Bean
+    public JwtRedisService jwtRedisService(StringRedisTemplate redisTemplate, JwtProvider jwtProvider) {
+        return new JwtRedisServiceImpl(redisTemplate, jwtProvider);
     }
 }
