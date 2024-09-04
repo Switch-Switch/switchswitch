@@ -28,6 +28,6 @@ public class JwtConfig {
 
     @Bean
     public JwtRedisService jwtRedisService(StringRedisTemplate redisTemplate, JwtProvider jwtProvider) {
-        return new JwtRedisServiceImpl(redisTemplate, jwtProvider, accessTokenExpireTime);
+        return new JwtRedisServiceImpl(redisTemplate, jwtProvider);
     }
 }

@@ -4,18 +4,20 @@ import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
+import java.util.concurrent.TimeUnit;
+
 public class JwtRedisServiceImpl implements JwtRedisService {
+    private final RedisTemplate<String, String> redisTemplate;
     private final ValueOperations<String, String> valueOperations;
     private final JwtProvider jwtProvider;
-    private final long accessTokenExpireTime;
 
     private final String BLOCKLIST_PREFIX = "blocklist:";
     private final String REFRESH_TOKEN_PREFIX = "refresh-token:";
 
-    public JwtRedisServiceImpl(RedisTemplate<String, String> redisTemplate, JwtProvider jwtProvider, long accessTokenExpireTime) {
+    public JwtRedisServiceImpl(RedisTemplate<String, String> redisTemplate, JwtProvider jwtProvider) {
+        this.redisTemplate = redisTemplate;
         this.valueOperations = redisTemplate.opsForValue();
         this.jwtProvider = jwtProvider;
-        this.accessTokenExpireTime = accessTokenExpireTime;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class JwtRedisServiceImpl implements JwtRedisService {
             valueOperations.getAndDelete(memberId);
             throw new NotAuthorizationException("Refresh token is expired", memberId);
         }
-        return jwtProvider.generateToken(memberId, accessTokenExpireTime);
+        return jwtProvider.generateToken(memberId, jwtProvider.getAccessTokenExpireTime());
     }
 
     @Override
@@ -36,12 +38,12 @@ public class JwtRedisServiceImpl implements JwtRedisService {
 
     @Override
     public void blockAccessToken(String jwt) {
-        valueOperations.set(BLOCKLIST_PREFIX + jwt, "");
+        saveWithExpire(BLOCKLIST_PREFIX + jwt, "", jwtProvider.getAccessTokenExpireTime());
     }
 
     @Override
     public void saveRefreshToken(Long memberId, String refreshToken) {
-        valueOperations.set(REFRESH_TOKEN_PREFIX + memberId, refreshToken);
+        saveWithExpire(REFRESH_TOKEN_PREFIX + memberId, refreshToken, jwtProvider.getRefreshTokenExpireTime());
     }
 
     @Override
@@ -52,5 +54,10 @@ public class JwtRedisServiceImpl implements JwtRedisService {
     @Override
     public void removeRefreshToken(Long id) {
         valueOperations.getAndDelete(REFRESH_TOKEN_PREFIX + id);
+    }
+
+    private void saveWithExpire(String key, String value, long expireMilliSecond) {
+        valueOperations.set(key, value);
+        redisTemplate.expire(key, expireMilliSecond, TimeUnit.MILLISECONDS);
     }
 }
