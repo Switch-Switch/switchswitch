@@ -1,13 +1,16 @@
 spring:
   application:
     name: config-server
+  config:
+    import: application-secret.yml
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/Switch-Switch/service-config
+          uri: git@github.com:Switch-Switch/service-config.git
           search-paths: config-files/**
           default-label: main
+          ignore-local-ssh-settings: true
 server:
   port: 8888
 management:
