@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -23,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtProvider jwtProvider;
-    private final AuthService authService;
+    private final List<String> notFiltered = List.of("/api/auth/signup", "/api/auth/login");
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -31,23 +32,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String jwt = jwtProvider.parseJwt(request);
-
-        if (jwt == null) {
+        if (isNotFiltered(request)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (jwtProvider.isExpired(jwt)) {
-            jwt = authService.refreshAuthorization(jwt, response);
-        }
-
+        String jwt = jwtProvider.parseJwt(request);
         String memberId = jwtProvider.parseSubject(jwt);
 
         if (memberId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(memberId);
             setSecurityContextHolder(userDetails);
         }
+
         filterChain.doFilter(request, response);
     }
 
@@ -55,5 +52,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+
+    private boolean isNotFiltered(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        for (String notFilter : notFiltered) {
+            if (path.startsWith(notFilter)) return true;
+        }
+        return false;
     }
 }
