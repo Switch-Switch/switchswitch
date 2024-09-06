@@ -15,3 +15,17 @@ spring:
           ignore-local-ssh-settings: true
 server:
   port: 8888
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
