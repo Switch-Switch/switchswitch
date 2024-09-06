@@ -1,4 +1,0 @@
-# product_list_limit 변경 시 URL 도 변경
-crawling:
-  baseUrl: https://store.nintendo.co.kr/digital/digital-all?supported_languages=216&product_list_limit=48
-  product-list-limit: 48
