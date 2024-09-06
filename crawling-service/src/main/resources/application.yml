@@ -1,10 +1,16 @@
+server:
+  port: 8081
+
 spring:
   application:
-    name: switchswitchcrawling
-  main:
-    web-application-type: none
+    name: crawling-service
+  profiles:
+    active: local
   config:
     import:
-      - application-db.yml
-      - application-crawling.yml
-
+      - application-secret.yml
+      - configserver:localhost:8888
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
