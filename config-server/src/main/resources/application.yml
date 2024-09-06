@@ -1,6 +1,8 @@
 spring:
   application:
     name: config-server
+  profiles:
+    active: local
   config:
     import: application-secret.yml
   cloud:
@@ -13,11 +15,3 @@ spring:
           ignore-local-ssh-settings: true
 server:
   port: 8888
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    shutdown:
-      enabled: true
