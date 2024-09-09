@@ -4,32 +4,13 @@ server:
 spring:
   application:
     name: member-service
+  profiles:
+    active: local
   config:
     import:
-      - application-db.yml
       - application-secret.yml
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-eureka:
-#  instance:
-#    prefer-ip-address: true
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      default-zone: http://localhost:8761/eureka
-jwt:
-  expired:
-    access-token: 300000 # 5 minute
-    refresh-token: 31536000000 # 1 year
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-
+      - configserver:http://localhost:8888
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
