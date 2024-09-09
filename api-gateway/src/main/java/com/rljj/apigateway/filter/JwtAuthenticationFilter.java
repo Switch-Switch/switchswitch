@@ -21,12 +21,10 @@ import org.springframework.web.server.ServerWebExchange;
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
 
     private final JwtProvider jwtProvider;
-    private final JwtRedisService jwtRedisService;
 
-    public JwtAuthenticationFilter(JwtProvider jwtProvider, JwtRedisService jwtRedisService) {
+    public JwtAuthenticationFilter(JwtProvider jwtProvider) {
         super(Config.class);
         this.jwtProvider = jwtProvider;
-        this.jwtRedisService = jwtRedisService;
     }
 
     @Override
@@ -36,18 +34,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             ServerHttpRequest request = exchange.getRequest();
             String jwt = extractTokenFromHeader(request.getHeaders());
 
-            if (jwt == null || jwtRedisService.isBlockedAccessToken(jwt)) {
+            if (jwt == null) {
                 exchange.getResponse().setStatusCode(config.getUnauthorizedStatus());
                 return exchange.getResponse().setComplete();
             }
 
-            if (jwtProvider.isExpired(jwt)) {
-                jwt = jwtRedisService.refreshAccessToken(jwt);
-                setTokenInCookie(exchange, jwt);
-            }
-
-            String memberId = jwtProvider.parseSubject(jwt);
-            // TODO SecurityContext
+            jwtProvider.validateJwt(jwt); // TODO block
 
             return chain.filter(exchange);
         };
