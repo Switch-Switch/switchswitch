@@ -44,7 +44,7 @@ public class CrawlingHandler {
             int pageSize = getPageSize();
             String url = getUrlWithPage();
 
-            for (int i = 1; i > 0; i--) { // 오래된 순부터
+            for (int i = pageSize; i > 0; i--) { // 오래된 순부터
                 List<CrawledChip> chips = crawlingRunner.crawl(url + i);
                 chipService.saveBulk(chips);
                 log.info("Complete page {} of {} chips.", i, pageSize);
