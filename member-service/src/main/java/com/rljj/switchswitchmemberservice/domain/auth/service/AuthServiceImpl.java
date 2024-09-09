@@ -33,14 +33,15 @@ public class AuthServiceImpl implements AuthService {
     @Value("${jwt.expired.access-token}")
     private long accessTokenExpireTime;
 
-    @Override
+    /*@Override
     @Transactional
     public String login(LoginRequest loginRequest, HttpServletResponse response) {
         Member member = memberService.getMemberByName(loginRequest.getName());
         authenticate(loginRequest, member);
         return handleJwt(response, member);
-    }
+    }*/
 
+    // TODO
     @Override
     @Transactional
     public String signup(SignupRequest signupRequest, HttpServletResponse response) {
@@ -48,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
         if (member.isPresent()) {
             throw new DuplicatedException("Duplicated Member", signupRequest.getName());
         }
+
         return handleJwt(response, memberService.createMember(signupRequest));
     }
 
@@ -65,6 +67,14 @@ public class AuthServiceImpl implements AuthService {
         return accessToken;
     }
 
+    @Override
+    @Transactional
+    public void updateRefreshToken(Long memberId, String refreshToken) {
+        Member member = memberService.getMember(memberId);
+
+        jwtRedisService.saveRefreshToken(memberId, refreshToken);
+    }
+
     private void authenticate(LoginRequest loginRequest, Member member) {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(member.getId(), loginRequest.getPassword())
@@ -78,4 +88,5 @@ public class AuthServiceImpl implements AuthService {
         jwtProvider.setJwtInCookie(jwtSet.getAccessToken(), response);
         return jwtSet.getAccessToken();
     }
+
 }

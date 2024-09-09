@@ -5,9 +5,11 @@ import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
-    String login(LoginRequest loginRequest, HttpServletResponse response);
+//    String login(LoginRequest loginRequest, HttpServletResponse response);
 
     String signup(SignupRequest signupRequest, HttpServletResponse response);
 
     String refreshAuthorization(String accessToken, HttpServletResponse response);
+
+    void updateRefreshToken(Long memberId, String refreshToken);
 }

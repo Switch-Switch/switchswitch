@@ -18,10 +18,10 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return new ResponseEntity<>(authService.login(loginRequest, response), HttpStatus.OK);
-    }
+    }*/
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequest signupRequest, HttpServletResponse response) {
