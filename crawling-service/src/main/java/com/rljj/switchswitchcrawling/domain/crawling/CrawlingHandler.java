@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,11 +27,11 @@ public class CrawlingHandler {
      * 기본: 새벽 3시에 작업 시작
      */
 //    바로 실행해보고 싶으면 fixedRate로 설정
-//    @Scheduled(fixedRate = 1000000)
+//    @Scheduled(fixedRate = 10000000)
     @Scheduled(cron = "0 0 3 * * ?")
     public void crawl() {
-//        if (isFirst()) initialize();
-//        if (isOutdated()) update();
+        if (isFirst()) initialize();
+        if (isOutdated()) update();
     }
 
     private boolean isFirst() {
@@ -43,10 +44,11 @@ public class CrawlingHandler {
             int pageSize = getPageSize();
             String url = getUrlWithPage();
 
-            for (int i = pageSize; i > 0; i--) { // 오래된 순부터
+            for (int i = 1; i > 0; i--) { // 오래된 순부터
                 List<CrawledChip> chips = crawlingRunner.crawl(url + i);
                 chipService.saveBulk(chips);
-                sleepZZ(i);
+                log.info("Complete page {} of {} chips.", i, pageSize);
+                sleepZZ();
             }
 
         } catch (IOException | InterruptedException e) {
@@ -76,7 +78,7 @@ public class CrawlingHandler {
                     if (isExist(chip.getName())) return;
                     chipService.save(chip);
                 }
-                sleepZZ(i);
+                sleepZZ();
             }
 
         } catch (IOException | InterruptedException e) {
@@ -96,8 +98,7 @@ public class CrawlingHandler {
         return chipService.isExist(name);
     }
 
-    private void sleepZZ(int page) throws InterruptedException {
-        log.info("Thread sleep, current page: {}", page);
+    private void sleepZZ() throws InterruptedException {
         Thread.sleep(2000);
     }
 

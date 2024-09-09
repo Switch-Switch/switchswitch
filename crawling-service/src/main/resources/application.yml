@@ -9,7 +9,7 @@ spring:
   config:
     import:
       - application-secret.yml
-      - configserver:localhost:8888
+      - configserver:http://localhost:8888
   datasource:
     url: ${db.url}
     username: ${db.username}
