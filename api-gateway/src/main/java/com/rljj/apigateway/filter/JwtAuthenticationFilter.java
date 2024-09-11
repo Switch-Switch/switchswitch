@@ -10,21 +10,21 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ServerWebExchange;
 
 @Slf4j
 @Component
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
 
     private final JwtProvider jwtProvider;
+    private final JwtRedisService jwtRedisService;
 
-    public JwtAuthenticationFilter(JwtProvider jwtProvider) {
+    public JwtAuthenticationFilter(JwtProvider jwtProvider, JwtRedisService jwtRedisService) {
         super(Config.class);
         this.jwtProvider = jwtProvider;
+        this.jwtRedisService = jwtRedisService;
     }
 
     @Override
@@ -34,12 +34,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             ServerHttpRequest request = exchange.getRequest();
             String jwt = extractTokenFromHeader(request.getHeaders());
 
-            if (jwt == null) {
+            if (jwt == null || jwtRedisService.isBlockedAccessToken(jwt)) {
                 exchange.getResponse().setStatusCode(config.getUnauthorizedStatus());
                 return exchange.getResponse().setComplete();
             }
 
-            jwtProvider.validateJwt(jwt); // TODO block
+            jwtProvider.validateJwt(jwt);
 
             return chain.filter(exchange);
         };
@@ -51,14 +51,6 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             return null;
         }
         return authHeader.substring(7);
-    }
-
-    private void setTokenInCookie(ServerWebExchange exchange, String token) {
-        ResponseCookie cookie = ResponseCookie.from("jwt", token)
-                .httpOnly(true)
-                .path("/")
-                .build();
-        exchange.getResponse().addCookie(cookie);
     }
 
     @Setter

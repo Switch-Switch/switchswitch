@@ -6,7 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,21 +19,21 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String memberId = authentication.getName();
+        String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(memberId);
-        return checkPassword(userDetails, password);
+        User user = (User) userDetailsService.loadUserByUsername(username);
+        return checkPassword(user, password);
     }
 
-    private Authentication checkPassword(UserDetails userDetails, String password) {
-        if (encoder.matches(password, userDetails.getPassword())) {
+    private Authentication checkPassword(User user, String password) {
+        if (encoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(
-                    userDetails.getUsername(),
-                    userDetails.getPassword(),
-                    userDetails.getAuthorities()
+                    user,
+                    user.getPassword(),
+                    user.getAuthorities()
             );
         } else {
-            throw new BadCredentialsException(userDetails.getUsername());
+            throw new BadCredentialsException(user.getUsername());
         }
     }
 }

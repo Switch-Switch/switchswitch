@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
@@ -21,10 +20,7 @@ import java.util.Date;
 
 @Getter
 @RequiredArgsConstructor
-@Component
 public class JwtProviderImpl implements JwtProvider {
-
-    private final JwtRedisService jwtRedisService;
 
     private final long accessTokenExpireTime;
     private final long refreshTokenExpireTime;
@@ -115,10 +111,6 @@ public class JwtProviderImpl implements JwtProvider {
                     .getPayload()
                     .getExpiration()
                     .before(new Date());
-
-            if (jwtRedisService.isBlockedAccessToken(jwt)) {
-                throw new RuntimeException(); // TODO
-            }
         } catch (SignatureException | MalformedJwtException |
                  UnsupportedJwtException | IllegalArgumentException |
                  ExpiredJwtException jwtException) {

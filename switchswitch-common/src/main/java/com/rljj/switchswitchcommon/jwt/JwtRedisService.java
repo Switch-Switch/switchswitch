@@ -1,8 +1,6 @@
 package com.rljj.switchswitchcommon.jwt;
 
 public interface JwtRedisService {
-    String refreshAccessToken(String jwt);
-
     boolean isBlockedAccessToken(String jwt);
 
     void blockAccessToken(String jwt);
