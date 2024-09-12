@@ -22,12 +22,17 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final AuthService authService;
     private final AuthLogoutHandler logoutHandler;
+    private final LoginAuthenticationFilter loginAuthenticationFilter;
+
+    @Bean
+    public LoginAuthenticationFilter loginAuthenticationFilter() {
+        LoginAuthenticationFilter filter = new LoginAuthenticationFilter(customAuthenticationManager, jwtProvider, authService);
+        filter.setFilterProcessesUrl("/api/auth/login");
+        return filter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSession httpSession) throws Exception {
-        LoginAuthenticationFilter loginAuthenticationFilter =
-                new LoginAuthenticationFilter(customAuthenticationManager, jwtProvider, authService);
-        loginAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
