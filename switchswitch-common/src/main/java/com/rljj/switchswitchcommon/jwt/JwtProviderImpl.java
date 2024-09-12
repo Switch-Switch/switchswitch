@@ -109,8 +109,7 @@ public class JwtProviderImpl implements JwtProvider {
                     .build()
                     .parseSignedClaims(jwt)
                     .getPayload()
-                    .getExpiration()
-                    .before(new Date());
+                    .getExpiration();
         } catch (SignatureException | MalformedJwtException |
                  UnsupportedJwtException | IllegalArgumentException |
                  ExpiredJwtException jwtException) {

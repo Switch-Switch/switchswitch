@@ -62,8 +62,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void updateRefreshToken(Long memberId, String refreshToken) {
-        Member member = memberService.getMember(memberId);
-
         jwtRedisService.saveRefreshToken(memberId, refreshToken);
     }
 

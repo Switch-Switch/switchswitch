@@ -30,19 +30,17 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("LoginAuthenticationFilter attemptAuthentication >>>>>>>>>>");
-        Authentication authentication;
-
         try {
             LoginRequest credential = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 
-            authentication = authenticationManager.authenticate(
+            return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(credential.getName(), credential.getPassword())
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return authentication;
+
     }
 
     // login success 이후 토큰 생성
