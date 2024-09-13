@@ -1,6 +1,5 @@
 package com.rljj.apigateway.filter;
 
-//TODO import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtRedisService;
 import lombok.Getter;

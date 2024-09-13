@@ -31,13 +31,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void signup(SignupRequest signupRequest, HttpServletResponse response) {
+    public void signup(SignupRequest signupRequest) {
         Optional<Member> member = memberService.getOpMemberByName(signupRequest.getName());
         if (member.isPresent()) {
             throw new DuplicatedException("Duplicated Member", signupRequest.getName());
         }
-
-        // TODO return void로 잠시 바꿔둠, HttpServletResponse 필요성
         memberService.createMember(signupRequest);
     }
 
@@ -48,11 +46,7 @@ public class AuthServiceImpl implements AuthService {
         Member member = memberService.getMember(memberId);
         String refreshToken = jwtRedisService.getRefreshToken(member.getId());
 
-        // TODO isExpired -> void validateJwt로 변경됨
-        /*if (refreshToken == null || jwtProvider.isExpired(refreshToken)) { // 재로그인
-            // 만료됐으면 refresh 삭제하는 로직도 추가해야 함 (레디스 안에 설정되어 있으면 ok)
-            throw new NotAuthorizationException("Refresh token expired", String.valueOf(member.getId()));
-        }*/
+        jwtProvider.validateJwt(refreshToken);
 
         accessToken = jwtProvider.generateToken(String.valueOf(member.getId()), accessTokenExpireTime);
         jwtProvider.setJwtInCookie(accessToken, response);
@@ -64,20 +58,5 @@ public class AuthServiceImpl implements AuthService {
     public void updateRefreshToken(Long memberId, String refreshToken) {
         jwtRedisService.saveRefreshToken(memberId, refreshToken);
     }
-
-    // TODO 삭제 예정
-    /*private void authenticate(LoginRequest loginRequest, Member member) {
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(member.getId(), loginRequest.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-    }
-
-    private String handleJwt(HttpServletResponse response, Member member) {
-        JwtSet jwtSet = jwtProvider.generateTokenSet(member.getId());
-        jwtRedisService.saveRefreshToken(member.getId(), jwtSet.getRefreshToken());
-        jwtProvider.setJwtInCookie(jwtSet.getAccessToken(), response);
-        return jwtSet.getAccessToken();
-    }*/
 
 }

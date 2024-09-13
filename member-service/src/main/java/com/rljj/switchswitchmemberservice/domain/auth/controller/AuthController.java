@@ -18,8 +18,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody SignupRequest signupRequest, HttpServletResponse response) {
-        authService.signup(signupRequest, response);
+    public ResponseEntity<Void> signup(@RequestBody SignupRequest signupRequest) {
+        authService.signup(signupRequest);
         return ResponseEntity.ok().build();
     }
 
