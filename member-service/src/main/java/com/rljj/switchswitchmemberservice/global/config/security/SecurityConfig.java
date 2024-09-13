@@ -1,7 +1,8 @@
 package com.rljj.switchswitchmemberservice.global.config.security;
 
+import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchmemberservice.domain.auth.service.AuthLogoutHandler;
-import com.rljj.switchswitchmemberservice.global.config.jwt.JwtAuthenticationFilter;
+import com.rljj.switchswitchmemberservice.domain.auth.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,24 +12,32 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationManager customAuthenticationManager;
+    private final JwtProvider jwtProvider;
+    private final AuthService authService;
     private final AuthLogoutHandler logoutHandler;
-    private final String[] permittedUrls = {"/api/auth/signup", "/api/auth/login"};
+    private final LoginAuthenticationFilter loginAuthenticationFilter;
+
+    @Bean
+    public LoginAuthenticationFilter loginAuthenticationFilter() {
+        LoginAuthenticationFilter filter = new LoginAuthenticationFilter(customAuthenticationManager, jwtProvider, authService);
+        filter.setFilterProcessesUrl("/api/auth/login");
+        return filter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSession httpSession) throws Exception {
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(permittedUrls).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .logout(logout -> logout.logoutUrl("/api/auth/logout")
@@ -36,7 +45,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(true)
                         .permitAll())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilter(loginAuthenticationFilter)
                 .exceptionHandling(
                         exception -> exception.accessDeniedPage("/login?error=403")
                 )
@@ -44,4 +53,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

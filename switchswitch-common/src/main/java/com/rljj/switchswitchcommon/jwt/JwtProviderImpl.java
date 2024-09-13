@@ -3,13 +3,15 @@ package com.rljj.switchswitchcommon.jwt;
 import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
@@ -18,7 +20,6 @@ import java.util.Date;
 
 @Getter
 @RequiredArgsConstructor
-@Component
 public class JwtProviderImpl implements JwtProvider {
 
     private final long accessTokenExpireTime;
@@ -101,17 +102,18 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     @Override
-    public boolean isExpired(String jwt) {
+    public void validateJwt(String jwt) {
         try {
-            return Jwts.parser()
+            Jwts.parser()
                     .verifyWith(getSecretKey())
                     .build()
                     .parseSignedClaims(jwt)
                     .getPayload()
-                    .getExpiration()
-                    .before(new Date());
-        } catch (ExpiredJwtException e) {
-            return true;
+                    .getExpiration();
+        } catch (SignatureException | MalformedJwtException |
+                 UnsupportedJwtException | IllegalArgumentException |
+                 ExpiredJwtException jwtException) {
+            throw jwtException;
         }
     }
 

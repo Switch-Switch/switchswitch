@@ -19,16 +19,16 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String memberId = authentication.getName();
+        String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(memberId);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return checkPassword(userDetails, password);
     }
 
     private Authentication checkPassword(UserDetails userDetails, String password) {
         if (encoder.matches(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(
-                    userDetails.getUsername(),
+                    userDetails,
                     userDetails.getPassword(),
                     userDetails.getAuthorities()
             );

@@ -1,6 +1,5 @@
 package com.rljj.apigateway.filter;
 
-//TODO import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtRedisService;
 import lombok.Getter;
@@ -10,11 +9,9 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ServerWebExchange;
 
 @Slf4j
 @Component
@@ -41,13 +38,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 return exchange.getResponse().setComplete();
             }
 
-            if (jwtProvider.isExpired(jwt)) {
-                jwt = jwtRedisService.refreshAccessToken(jwt);
-                setTokenInCookie(exchange, jwt);
-            }
-
-            String memberId = jwtProvider.parseSubject(jwt);
-            // TODO SecurityContext
+            jwtProvider.validateJwt(jwt);
 
             return chain.filter(exchange);
         };
@@ -59,14 +50,6 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             return null;
         }
         return authHeader.substring(7);
-    }
-
-    private void setTokenInCookie(ServerWebExchange exchange, String token) {
-        ResponseCookie cookie = ResponseCookie.from("jwt", token)
-                .httpOnly(true)
-                .path("/")
-                .build();
-        exchange.getResponse().addCookie(cookie);
     }
 
     @Setter

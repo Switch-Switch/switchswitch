@@ -1,6 +1,5 @@
 package com.rljj.switchswitchcommon.jwt;
 
-import com.rljj.switchswitchcommon.exception.NotAuthorizationException;
 import com.rljj.switchswitchcommon.redis.RedisRepository;
 import com.rljj.switchswitchcommon.redis.RedisRepositoryImpl;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,17 +16,6 @@ public class JwtRedisServiceImpl implements JwtRedisService {
     public JwtRedisServiceImpl(RedisTemplate<String, String> redisTemplate, JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
         this.redisRepository = new RedisRepositoryImpl(redisTemplate);
-    }
-
-    @Override
-    public String refreshAccessToken(String jwt) {
-        String memberId = jwtProvider.parseSubjectWithoutSecure(jwt);
-        String refreshToken = redisRepository.get(REFRESH_TOKEN_PREFIX + memberId);
-        if (refreshToken == null || jwtProvider.isExpired(refreshToken)) {
-            redisRepository.delete(memberId);
-            throw new NotAuthorizationException("Refresh token is expired", memberId);
-        }
-        return jwtProvider.generateToken(memberId, jwtProvider.getAccessTokenExpireTime());
     }
 
     @Override

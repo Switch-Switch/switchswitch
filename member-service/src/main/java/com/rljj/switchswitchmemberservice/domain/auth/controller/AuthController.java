@@ -1,6 +1,5 @@
 package com.rljj.switchswitchmemberservice.domain.auth.controller;
 
-import com.rljj.switchswitchmemberservice.domain.auth.dto.LoginRequest;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import com.rljj.switchswitchmemberservice.domain.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,14 +17,10 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        return new ResponseEntity<>(authService.login(loginRequest, response), HttpStatus.OK);
-    }
-
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequest signupRequest, HttpServletResponse response) {
-        return new ResponseEntity<>(authService.signup(signupRequest, response), HttpStatus.OK);
+    public ResponseEntity<Void> signup(@RequestBody SignupRequest signupRequest) {
+        authService.signup(signupRequest);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/refresh")
@@ -37,4 +32,5 @@ public class AuthController {
     public ResponseEntity<String> test(@AuthenticationPrincipal UserDetails userDetails) {
         return new ResponseEntity<>(userDetails.getUsername(), HttpStatus.OK);
     }
+
 }

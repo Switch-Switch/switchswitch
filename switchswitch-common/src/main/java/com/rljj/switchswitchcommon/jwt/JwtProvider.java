@@ -18,6 +18,8 @@ public interface JwtProvider {
 
     String parseJwt(HttpServletRequest request);
 
+
+
     /**
      * 만료 여부와 관계없이 JWT의 subject를 가져옴, 필요할 때만 사용하고 이외에는 parseSubject() 사용
      * @param jwt accessToken
@@ -27,7 +29,7 @@ public interface JwtProvider {
 
     Long parseMemberIdWithoutSecure(String jwt);
 
-    boolean isExpired(String jwt);
+    void validateJwt(String jwt);
 
     void setJwtInCookie(String accessToken, HttpServletResponse response);
 
