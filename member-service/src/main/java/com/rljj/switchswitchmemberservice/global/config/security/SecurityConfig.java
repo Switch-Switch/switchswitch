@@ -4,6 +4,7 @@ import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchmemberservice.domain.auth.service.AuthLogoutHandler;
 import com.rljj.switchswitchmemberservice.domain.auth.service.AuthService;
 import com.rljj.switchswitchmemberservice.domain.member.service.MemberService;
+import com.rljj.switchswitchmemberservice.global.config.jwt.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -34,6 +36,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/auth/test").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -43,6 +46,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .permitAll())
                 .addFilter(loginAuthenticationFilter())
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
                         exception -> exception.accessDeniedPage("/login?error=403")
                 )
@@ -67,5 +71,10 @@ public class SecurityConfig {
         filter.setFilterProcessesUrl("/api/auth/login");
         filter.setAuthenticationManager(authenticationManager());
         return filter;
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtProvider, userDetailsService(), memberService);
     }
 }

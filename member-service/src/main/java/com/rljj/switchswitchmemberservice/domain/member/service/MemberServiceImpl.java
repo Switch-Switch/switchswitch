@@ -25,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member getMemberByName(String name) {
+    public Member getMember(String name) {
         return getOpMemberByName(name).orElseThrow(() -> new UserNotFoundException(name));
     }
 
@@ -36,8 +36,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member createMember(SignupRequest signupRequest) {
-        return memberRepository.save(Member.builder()
+    public void createMember(SignupRequest signupRequest) {
+        memberRepository.save(Member.builder()
                 .name(signupRequest.getName())
                 .password(encoder.encode(signupRequest.getPassword()))
                 .build());
