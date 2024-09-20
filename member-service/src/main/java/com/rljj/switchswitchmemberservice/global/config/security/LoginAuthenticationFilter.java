@@ -55,8 +55,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         JwtSet jwtSet = jwtProvider.generateTokenSet(userId);
         authService.updateRefreshToken(userId, jwtSet.getRefreshToken());
         jwtProvider.setJwtInCookie(jwtSet.getAccessToken(), response);
-
-        //super.successfulAuthentication(request, response, chain, authResult);
     }
 
 }
