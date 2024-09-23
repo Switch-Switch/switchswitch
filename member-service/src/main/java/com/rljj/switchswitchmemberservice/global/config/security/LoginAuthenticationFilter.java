@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -22,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final CustomAuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final AuthService authService;
 
@@ -39,8 +40,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     // login success 이후 토큰 생성
@@ -56,8 +55,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         JwtSet jwtSet = jwtProvider.generateTokenSet(userId);
         authService.updateRefreshToken(userId, jwtSet.getRefreshToken());
         jwtProvider.setJwtInCookie(jwtSet.getAccessToken(), response);
-
-        //super.successfulAuthentication(request, response, chain, authResult);
     }
 
 }

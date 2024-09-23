@@ -32,5 +32,4 @@ public class AuthController {
     public ResponseEntity<String> test(@AuthenticationPrincipal UserDetails userDetails) {
         return new ResponseEntity<>(userDetails.getUsername(), HttpStatus.OK);
     }
-
 }

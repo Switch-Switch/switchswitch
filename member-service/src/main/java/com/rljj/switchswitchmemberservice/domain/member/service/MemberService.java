@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface MemberService {
     Optional<Member> getOpMemberByName(String name);
 
-    Member getMemberByName(String name);
+    Member getMember(String name);
 
     Member getMember(Long id);
 
-    Member createMember(SignupRequest signupRequest);
+    void createMember(SignupRequest signupRequest);
 }

@@ -6,7 +6,6 @@ import com.rljj.switchswitchcommon.jwt.JwtRedisService;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
 import com.rljj.switchswitchmemberservice.domain.member.service.MemberService;
-import com.rljj.switchswitchmemberservice.global.config.security.CustomAuthenticationManager;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,6 @@ import java.util.Optional;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final CustomAuthenticationManager authenticationManager;
     private final MemberService memberService;
     private final JwtProvider jwtProvider;
     private final JwtRedisService jwtRedisService;
