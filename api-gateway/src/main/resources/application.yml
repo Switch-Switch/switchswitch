@@ -5,5 +5,3 @@ spring:
     name: api-gateway
   profiles:
     active: local
-  config:
-    import: configserver:http://localhost:8888
