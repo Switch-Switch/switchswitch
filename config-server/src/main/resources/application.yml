@@ -10,7 +10,7 @@ spring:
       server:
         git:
           uri: git@github.com:Switch-Switch/service-config.git
-          search-paths: config-files/**
+          search-paths: environments/**
           default-label: main
           ignore-local-ssh-settings: true
 server:

@@ -1,6 +1,5 @@
 server:
   port: 8083
-
 spring:
   application:
     name: member-service
@@ -8,8 +7,8 @@ spring:
     active: local
   config:
     import:
-      - application-secret.yml
       - configserver:http://localhost:8888
+      - application-secret.yml
   datasource:
     url: ${db.url}
     username: ${db.username}
