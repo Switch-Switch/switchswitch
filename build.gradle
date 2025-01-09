@@ -68,3 +68,15 @@ project(':member-service') {
         implementation project(':switchswitch-common')
     }
 }
+
+project(':crawling-service') {
+    dependencies {
+        implementation project(':switchswitch-common')
+    }
+}
+
+project(':chip-service') {
+    dependencies {
+        implementation project(':switchswitch-common')
+    }
+}
