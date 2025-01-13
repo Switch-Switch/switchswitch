@@ -1,7 +1,7 @@
 package com.rljj.switchswitchmemberservice.domain.member.service;
 
+import com.rljj.switchswitchcommon.entity.member.Member;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
-import com.rljj.switchswitchmemberservice.domain.member.entity.Member;
 
 import java.util.Optional;
 

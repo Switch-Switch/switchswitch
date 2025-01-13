@@ -1,4 +1,4 @@
-rootProject.name = 'switchswithch'
+rootProject.name = 'switchswitch'
 include 'eureka-server'
 include 'api-gateway'
 include 'config-server'
