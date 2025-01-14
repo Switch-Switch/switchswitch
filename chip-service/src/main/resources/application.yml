@@ -1,19 +1,10 @@
 server:
   port: 8084
-
 spring:
   application:
     name: chip-service
   profiles:
     active: local
-  cloud:
-    config:
-      uri: http://localhost:8888
   config:
     import:
-      - configserver:http://localhost:8888
       - application-secret.yml
-  datasource:
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
