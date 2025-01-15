@@ -1,4 +1,4 @@
-package com.rljj.switchswitchcommon.entity.baseentity;
+package com.rljj.switchswitchentity.baseentity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

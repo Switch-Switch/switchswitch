@@ -1,10 +1,10 @@
-package com.rljj.swtichswitchentity;
+package com.rljj.switchswitchentity;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SwtichswitchEntityApplicationTests {
+class SwitchswitchEntityApplicationTests {
 
     @Test
     void contextLoads() {
