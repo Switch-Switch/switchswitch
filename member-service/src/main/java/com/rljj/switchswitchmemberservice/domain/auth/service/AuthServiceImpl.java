@@ -1,9 +1,9 @@
 package com.rljj.switchswitchmemberservice.domain.auth.service;
 
-import com.rljj.switchswitchcommon.entity.member.Member;
 import com.rljj.switchswitchcommon.exception.DuplicatedException;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtRedisService;
+import com.rljj.switchswitchentity.member.Member;
 import com.rljj.switchswitchmemberservice.domain.auth.dto.SignupRequest;
 import com.rljj.switchswitchmemberservice.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,6 +1,5 @@
-package com.rljj.switchswitchcrawling.domain.chip;
+package com.rljj.switchswitchentity.chip;
 
-import com.rljj.switchswitchcrawling.domain.crawling.CrawledChip;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,14 +30,4 @@ public class Chip {
     private String consoleModel;
 
     private LocalDateTime createdDate;
-
-    public static Chip from(CrawledChip chip) {
-        return Chip.builder()
-                .name(chip.getName())
-                .imageUrl(chip.getImageUrl())
-                .price(chip.getPrice())
-                .consoleModel(chip.getConsoleModel())
-                .createdDate(LocalDateTime.now())
-                .build();
-    }
 }

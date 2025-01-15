@@ -1,7 +1,10 @@
 package com.rljj.switchswitchcrawling.domain.crawling;
 
+import com.rljj.switchswitchentity.chip.Chip;
 import lombok.*;
 import org.jsoup.nodes.Element;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,6 +24,16 @@ public class CrawledChip {
                 .imageUrl(element.select(".product-image-photo").attr("src"))
                 .price(element.select(".price").text())
                 .consoleModel("nintendo") // default
+                .build();
+    }
+
+    public Chip toChip() {
+        return Chip.builder()
+                .name(name)
+                .imageUrl(imageUrl)
+                .price(price)
+                .consoleModel(consoleModel)
+                .createdDate(LocalDateTime.now())
                 .build();
     }
 }

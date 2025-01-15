@@ -1,6 +1,6 @@
 package com.rljj.switchswitchmemberservice.domain.member.repository;
 
-import com.rljj.switchswitchcommon.entity.member.Member;
+import com.rljj.switchswitchentity.member.Member;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -68,17 +68,20 @@ project(':api-gateway') {
 project(':member-service') {
     dependencies {
         implementation project(':switchswitch-common')
+        implementation project(':switchswitch-entity')
     }
 }
 
 project(':crawling-service') {
     dependencies {
         implementation project(':switchswitch-common')
+        implementation project(':switchswitch-entity')
     }
 }
 
 project(':chip-service') {
     dependencies {
         implementation project(':switchswitch-common')
+        implementation project(':switchswitch-entity')
     }
 }
