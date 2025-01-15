@@ -1,4 +1,4 @@
-package com.rljj.switchswitchmemberservice.global.config.jpa;
+package com.inzisoft.chipservice.global.config.jpa;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
