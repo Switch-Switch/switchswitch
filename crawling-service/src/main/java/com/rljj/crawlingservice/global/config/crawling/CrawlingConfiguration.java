@@ -1,4 +1,4 @@
-package com.rljj.crawlingservice.global.config;
+package com.rljj.crawlingservice.global.config.crawling;
 
 import com.rljj.crawlingservice.domain.crawling.CrawlingNintendoStore;
 import com.rljj.crawlingservice.domain.crawling.CrawlingRunner;
