@@ -16,12 +16,12 @@ public class ChipService {
 
     @Transactional
     public void saveBulk(List<CrawledChip> chips) {
-        chipRepository.saveAll(chips.stream().map(Chip::from).toList());
+        chipRepository.saveAll(chips.stream().map(CrawledChip::toChip).toList());
     }
 
     @Transactional
     public void save(CrawledChip chip) {
-        chipRepository.save(Chip.from(chip));
+        chipRepository.save(chip.toChip());
     }
 
     public long getCount() {

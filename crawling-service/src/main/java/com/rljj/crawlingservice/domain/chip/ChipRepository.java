@@ -1,5 +1,6 @@
 package com.rljj.crawlingservice.domain.chip;
 
+import com.rljj.switchswitchentity.chip.Chip;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

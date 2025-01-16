@@ -1,6 +1,6 @@
 package com.rljj.memberservice.global.config.security;
 
-import com.rljj.memberservice.domain.member.entity.Member;
+import com.rljj.switchswitchentity.member.Member;
 import com.rljj.memberservice.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,6 +1,6 @@
-package com.rljj.memberservice.domain.member.entity;
+package com.rljj.switchswitchentity.member;
 
-import com.rljj.switchswitchcommon.baseentity.BaseEntity;
+import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;

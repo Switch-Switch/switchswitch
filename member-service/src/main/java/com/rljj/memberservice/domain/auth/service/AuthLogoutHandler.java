@@ -2,7 +2,7 @@ package com.rljj.memberservice.domain.auth.service;
 
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtRedisService;
-import com.rljj.memberservice.domain.member.entity.Member;
+import com.rljj.switchswitchentity.member.Member;
 import com.rljj.memberservice.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
