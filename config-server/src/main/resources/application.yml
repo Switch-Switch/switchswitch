@@ -11,7 +11,7 @@ spring:
         git:
           uri: git@github.com:Switch-Switch/service-config.git
           search-paths: environments/**
-          default-label: main
+          default-label: postgres-migration
           ignore-local-ssh-settings: true
 server:
   port: 8888
