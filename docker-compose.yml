@@ -42,3 +42,13 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - ~/switchswitch/docker/kafka:/home/kafka
+
+  # Redis
+  redis:
+    image: redis:7.4.0
+    ports:
+      - "6379:6379"
+    command: "redis-server"
+    volumes:
+      - ~/switchswitch/docker/redis:/home/redis
+    container_name: "swt-redis"
