@@ -1,4 +1,4 @@
-package com.rljj.switchswitchentity.chip.type;
+package com.rljj.switchswitchentity.chip.chipinfo;
 
 public enum ConsoleModel {
     NINTENDO_SWITCH1,

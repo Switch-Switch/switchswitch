@@ -1,4 +1,4 @@
-package com.rljj.switchswitchentity.chip;
+package com.rljj.switchswitchentity.chip.chipinfo;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
         @Index(name = "idx_name", columnList = "name")
 })
 public class Chip {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -30,4 +30,6 @@ public class Chip {
     private String consoleModel;
 
     private LocalDateTime createdDate;
+
+
 }

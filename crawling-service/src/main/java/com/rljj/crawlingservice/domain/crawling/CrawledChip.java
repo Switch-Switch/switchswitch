@@ -1,6 +1,6 @@
 package com.rljj.crawlingservice.domain.crawling;
 
-import com.rljj.switchswitchentity.chip.Chip;
+import com.rljj.switchswitchentity.chip.chipinfo.Chip;
 import lombok.*;
 import org.jsoup.nodes.Element;
 

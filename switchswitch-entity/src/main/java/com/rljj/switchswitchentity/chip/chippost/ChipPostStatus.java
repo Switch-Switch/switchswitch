@@ -1,4 +1,4 @@
-package com.rljj.switchswitchentity.chip.chippost.type;
+package com.rljj.switchswitchentity.chip.chippost;
 
 public enum ChipPostStatus {
     OPEN,

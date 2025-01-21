@@ -2,7 +2,6 @@ package com.rljj.switchswitchentity.chip.chipexchange;
 
 import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
-import com.rljj.switchswitchentity.chip.chipexchange.type.ChipExchangeStatus;
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.member.Member;
 import jakarta.persistence.*;

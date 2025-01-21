@@ -1,4 +1,4 @@
-package com.rljj.switchswitchentity.chip.chipexchange.type;
+package com.rljj.switchswitchentity.chip.chipexchange;
 
 public enum ChipExchangeStatus {
     REQUESTED,
