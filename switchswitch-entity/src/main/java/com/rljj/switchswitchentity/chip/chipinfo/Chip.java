@@ -15,10 +15,6 @@ import java.time.LocalDateTime;
         @Index(name = "idx_name", columnList = "name")
 })
 public class Chip {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     @Column(nullable = false)
     private String name;
 
