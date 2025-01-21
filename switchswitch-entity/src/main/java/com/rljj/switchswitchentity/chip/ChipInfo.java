@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "chip_info")
 public class ChipInfo extends BaseEntity {
     @Id
-    @Column(name = "chip_id")
+    @Column(name = "chip_info_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
