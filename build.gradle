@@ -85,3 +85,10 @@ project(':chip-service') {
         implementation project(':switchswitch-entity')
     }
 }
+
+project(':chat-service') {
+    dependencies {
+        implementation project(':switchswitch-common')
+        implementation project(':switchswitch-entity')
+    }
+}
