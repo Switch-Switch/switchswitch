@@ -30,9 +30,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void signup(SignupRequest signupRequest) {
-        Optional<Member> member = memberService.getOpMemberByName(signupRequest.getName());
+        Optional<Member> member = memberService.getOpMemberByName(signupRequest.getEmail());
         if (member.isPresent()) {
-            throw new DuplicatedException("Duplicated Member", signupRequest.getName());
+            throw new DuplicatedException("Duplicated Member", signupRequest.getEmail());
         }
         memberService.createMember(signupRequest);
     }

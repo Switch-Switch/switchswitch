@@ -20,13 +20,13 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder encoder;
 
     @Override
-    public Optional<Member> getOpMemberByName(String name) {
-        return memberRepository.findByName(name);
+    public Optional<Member> getOpMemberByName(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     @Override
-    public Member getMember(String name) {
-        return getOpMemberByName(name).orElseThrow(() -> new UserNotFoundException(name));
+    public Member getMember(String email) {
+        return getOpMemberByName(email).orElseThrow(() -> new UserNotFoundException(email));
     }
 
     @Override
@@ -38,8 +38,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void createMember(SignupRequest signupRequest) {
         memberRepository.save(Member.builder()
-                .name(signupRequest.getName())
+                .email(signupRequest.getEmail())
                 .password(encoder.encode(signupRequest.getPassword()))
+                .nickname(signupRequest.getNickname())
                 .build());
     }
 }
