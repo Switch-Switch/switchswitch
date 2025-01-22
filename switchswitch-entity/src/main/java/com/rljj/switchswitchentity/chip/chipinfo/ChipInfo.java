@@ -7,25 +7,22 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Builder
-@Table(name = "chip_info")
+@Table(indexes = {
+        @Index(name = "idx_name", columnList = "name")
+})
 public class ChipInfo extends BaseEntity {
-//    @Id
-//    @Column(name = "chip_info_id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
-    @Column(name = "name", nullable = false)
+    @NonNull
     private String name;
 
-    @Column(name = "image_url", nullable = false)
+    @NonNull
     private String imageUrl;
 
-    @Column(name = "price", nullable = false)
-    private int price;
+    @NonNull
+    private String price;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "console_model", nullable = false)
+    @NonNull
     private ConsoleModel consoleModel;
 }
