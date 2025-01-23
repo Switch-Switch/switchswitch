@@ -12,14 +12,15 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "member")
 public class Member extends BaseEntity {
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
+    @NonNull
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
+    @NonNull
     private String nickname;
 
-    @Column(nullable = false)
+    @NonNull
     private String password;
 }

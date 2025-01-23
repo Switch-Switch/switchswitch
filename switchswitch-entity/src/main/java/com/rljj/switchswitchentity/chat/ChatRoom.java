@@ -7,17 +7,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.NonNull;
+import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "chat_room")
+@AllArgsConstructor
+@Builder
 public class ChatRoom extends BaseEntity {
-//    @Id
-//    @Column(name = "chat_room_id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     @ManyToOne
     @JoinColumn(name = "chip_post_id", nullable = false)
     private ChipPost post;
@@ -31,7 +28,7 @@ public class ChatRoom extends BaseEntity {
     private Member interestedUser;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @NonNull
     private ChatRoomStatus status;
     
 }

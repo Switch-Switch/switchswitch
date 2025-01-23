@@ -4,40 +4,31 @@ import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
 import com.rljj.switchswitchentity.member.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "chip_post")
+@AllArgsConstructor
+@Builder
 public class ChipPost extends BaseEntity {
     @ManyToOne
-    @JoinColumn(name = "chip_info_id", nullable = false)
+    @JoinColumn(name = "chip_info_id")
+    @NonNull
     private ChipInfo chipInfo;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
+    @NonNull
     private Member member;
 
-    @Column(name = "title", nullable = false)
+    @NonNull
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @NonNull
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @NonNull
     private ChipPostStatus status;
-
-    @Builder
-    public ChipPost(ChipInfo chipInfo, Member member, String title, String description, ChipPostStatus status) {
-        this.chipInfo = chipInfo;
-        this.member = member;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-    }
 }
