@@ -13,17 +13,17 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ChipExchange extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chip_post_id")
     @NonNull
     private ChipPost chipPost;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chip_info_id")
     @NonNull
     private ChipInfo chipInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @NonNull
     private Member member;
