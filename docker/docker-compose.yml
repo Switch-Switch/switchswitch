@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  # PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/switchswitch/docker/postgres:/home/postgres
+    working_dir: /home/postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: switchswitch
+
+  # DynamoDB
+  dynamodb-local: # DynamoDB 컨테이너
+    image: amazon/dynamodb-local:latest # DynamoDB 이미지
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000" # port mapping
+    healthcheck: # health check, 초기화 스크립트를 실행하기 전 DynamoDB 준비가 완료되었는지 확인하기 위한 ping 커맨드
+      test: [ "CMD-SHELL", '[ "$(curl -s -o /dev/null -I -w ''%{http_code}'' http://localhost:8000)" == "400" ]' ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+    volumes:
+      - ~/switchswitch/docker/dynamodb:/home/dynamodblocal/data
+      - ./init_dynamodb.sh:/home/dynamodblocal/init_dynamodb.sh
+    working_dir: /home/dynamodblocal
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+
+  setup-dynamo:
+    image: amazon/aws-cli
+    depends_on:
+      dynamodb-local:
+        condition: service_healthy # dynamodb-local 컨테이너 healthy check 까지 대기
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: ap-northeast-1
+    entrypoint: ["/bin/sh","-c"] # sh 쉘 사용
+    volumes: # 초기화 스크립트 위치를 볼륨으로 공유
+      - ./init/dynamodb-init.sh:/aws/init/dynamodb-init.sh
+    command:
+      - |
+        sh ./init/dynamodb-init.sh
+
+  # Kafka
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - ~/switchswitch/docker/kafka:/home/kafka
+
+  # Redis
+  redis:
+    image: redis:7.4.0
+    ports:
+      - "6379:6379"
+    command: "redis-server"
+    volumes:
+      - ~/switchswitch/docker/redis:/home/redis
+    container_name: "swt-redis"
