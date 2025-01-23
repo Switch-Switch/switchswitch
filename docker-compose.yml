@@ -23,7 +23,7 @@ services:
       - "8000:8000"
     volumes:
       - ~/switchswitch/docker/dynamodb:/home/dynamodblocal/data
-      - ./init_dynamodb.sh:/home/dynamodblocal/script/init_dynamodb.sh
+      - ./init_dynamodb.sh:/home/dynamodblocal/init_dynamodb.sh
     working_dir: /home/dynamodblocal
     command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
 

@@ -1,31 +1,31 @@
 #!/bin/sh
 
+sleep 5
 
-# AWS CLI 설치 스크립트
-echo "Starting AWS CLI installation..."
+echo "Installing required dependencies..."
+apt-get update && apt-get install -y unzip curl
 
-# 기존 AWS CLI 제거
-echo "Removing existing AWS CLI..."
-sudo yum remove -y awscli
-
-# AWS CLI V2 다운로드
 echo "Downloading AWS CLI V2..."
 curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 
-# 압축 해제
 echo "Unzipping AWS CLI package..."
 unzip -q awscliv2.zip
 
-# AWS CLI 설치
 echo "Installing AWS CLI..."
-sudo ./aws/install
+./aws/install
 
-# 설치 확인
 echo "Verifying AWS CLI installation..."
 aws --version
 
-# 정리 작업
 echo "Cleaning up..."
 rm -rf awscliv2.zip aws
 
-echo "AWS CLI installation completed."
+echo "Creating DynamoDB table..."
+aws dynamodb create-table \
+    --table-name ChatMessage \
+    --attribute-definitions AttributeName=chatMessageId,AttributeType=S \
+    --key-schema AttributeName=chatMessageId,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+    --endpoint-url http://localhost:8000
+
+echo "Table 'MyTable' created successfully."
