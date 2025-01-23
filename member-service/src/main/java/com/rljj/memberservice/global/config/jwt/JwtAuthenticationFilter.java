@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (jwt != null) {
             Long memberId = jwtProvider.parseMemberId(jwt);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(memberService.getMember(memberId).getName());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(memberService.getMember(memberId).getEmail());
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

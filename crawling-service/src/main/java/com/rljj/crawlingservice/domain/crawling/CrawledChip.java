@@ -1,6 +1,7 @@
 package com.rljj.crawlingservice.domain.crawling;
 
-import com.rljj.switchswitchentity.chip.Chip;
+import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
+import com.rljj.switchswitchentity.chip.chipinfo.ConsoleModel;
 import lombok.*;
 import org.jsoup.nodes.Element;
 
@@ -27,13 +28,12 @@ public class CrawledChip {
                 .build();
     }
 
-    public Chip toChip() {
-        return Chip.builder()
+    public ChipInfo toChip() {
+        return ChipInfo.builder()
                 .name(name)
                 .imageUrl(imageUrl)
                 .price(price)
-                .consoleModel(consoleModel)
-                .createdDate(LocalDateTime.now())
+                .consoleModel(ConsoleModel.NINTENDO_SWITCH1)
                 .build();
     }
 }

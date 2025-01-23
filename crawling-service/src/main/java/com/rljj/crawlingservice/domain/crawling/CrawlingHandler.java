@@ -1,6 +1,6 @@
 package com.rljj.crawlingservice.domain.crawling;
 
-import com.rljj.crawlingservice.domain.chip.ChipService;
+import com.rljj.crawlingservice.domain.chip.ChipInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CrawlingHandler {
 
     private final CrawlingRunner crawlingRunner;
-    private final ChipService chipService;
+    private final ChipInfoService chipInfoService;
 
     @Value("${crawling.baseUrl}")
     private String baseUrl;
@@ -34,7 +34,7 @@ public class CrawlingHandler {
     }
 
     private boolean isFirst() {
-        return chipService.getCount() == 0;
+        return chipInfoService.getCount() == 0;
     }
 
     private void initialize() {
@@ -45,7 +45,7 @@ public class CrawlingHandler {
 
             for (int i = pageSize; i > 0; i--) { // 오래된 순부터
                 List<CrawledChip> chips = crawlingRunner.crawl(url + i);
-                chipService.saveBulk(chips);
+                chipInfoService.saveBulk(chips);
                 sleepZZ(i);
             }
 
@@ -58,7 +58,7 @@ public class CrawlingHandler {
 
     private boolean isOutdated() {
         try {
-            return chipService.getCount() < crawlingRunner.getTotalItemSize(baseUrl);
+            return chipInfoService.getCount() < crawlingRunner.getTotalItemSize(baseUrl);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +74,7 @@ public class CrawlingHandler {
                 List<CrawledChip> chips = crawlingRunner.crawl(url + i);
                 for (CrawledChip chip : chips) {
                     if (isExist(chip.getName())) return;
-                    chipService.save(chip);
+                    chipInfoService.save(chip);
                 }
                 sleepZZ(i);
             }
@@ -93,7 +93,7 @@ public class CrawlingHandler {
     }
 
     private boolean isExist(String name) {
-        return chipService.isExist(name);
+        return chipInfoService.isExist(name);
     }
 
     private void sleepZZ(int page) throws InterruptedException {
