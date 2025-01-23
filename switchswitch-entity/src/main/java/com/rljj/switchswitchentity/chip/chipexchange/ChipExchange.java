@@ -14,17 +14,14 @@ import lombok.*;
 @Builder
 public class ChipExchange extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chip_post_id")
     @NonNull
     private ChipPost chipPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chip_info_id")
     @NonNull
     private ChipInfo chipInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
     @NonNull
     private Member member;
 

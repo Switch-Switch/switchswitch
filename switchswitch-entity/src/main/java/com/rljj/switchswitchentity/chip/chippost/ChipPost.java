@@ -13,12 +13,10 @@ import lombok.*;
 @Builder
 public class ChipPost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chip_info_id")
     @NonNull
     private ChipInfo chipInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
     @NonNull
     private Member member;
 

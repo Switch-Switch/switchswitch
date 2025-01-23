@@ -16,15 +16,15 @@ import lombok.*;
 @Builder
 public class ChatRoom extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chip_post_id", nullable = false)
-    private ChipPost post;
+    @NonNull
+    private ChipPost chipPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_user_id", nullable = false)
+    @NonNull
     private Member creatorUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "interested_user_id", nullable = false)
+    @NonNull
     private Member interestedUser;
 
     @Enumerated(EnumType.STRING)
