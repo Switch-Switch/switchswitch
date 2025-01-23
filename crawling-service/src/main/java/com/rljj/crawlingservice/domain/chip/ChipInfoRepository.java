@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ChipRepository extends JpaRepository<ChipInfo, Long> {
+public interface ChipInfoRepository extends JpaRepository<ChipInfo, Long> {
     Optional<ChipInfo> findByName(String name);
 }
