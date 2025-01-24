@@ -1,4 +1,5 @@
 version: "3.8"
+name: switchswitch
 
 services:
   # PostgreSQL
@@ -28,12 +29,12 @@ services:
       retries: 10
     volumes:
       - ~/switchswitch/docker/dynamodb:/home/dynamodblocal/data
-      - ./init_dynamodb.sh:/home/dynamodblocal/init_dynamodb.sh
     working_dir: /home/dynamodblocal
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
 
-  setup-dynamo:
+  setup-dynamodb:
     image: amazon/aws-cli
+    container_name: setup-dynamodb
     depends_on:
       dynamodb-local:
         condition: service_healthy # dynamodb-local 컨테이너 healthy check 까지 대기
