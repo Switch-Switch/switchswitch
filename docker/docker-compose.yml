@@ -73,4 +73,4 @@ services:
     command: "redis-server"
     volumes:
       - ~/switchswitch/docker/redis:/home/redis
-    container_name: "swt-redis"
+    container_name: "redis"
