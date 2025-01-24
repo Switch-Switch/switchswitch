@@ -1,4 +1,4 @@
-package com.rljj.chatservice.global.config.dynamodb;
+package com.rljj.chatservice.domain.chat.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
