@@ -1,0 +1,11 @@
+aws dynamodb create-table\
+  --table-name chat_messages\
+  --attribute-definitions\
+    AttributeName=chatroom_id,AttributeType=N\
+    AttributeName=created_at,AttributeType=S\
+  --key-schema\
+    AttributeName=chatroom_id,KeyType=HASH\
+    AttributeName=created_at,KeyType=RANGE\
+  --provisioned-throughput\
+    ReadCapacityUnits=5,WriteCapacityUnits=5\
+  --endpoint-url http://dynamodb-local:8000
