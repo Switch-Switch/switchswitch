@@ -1,8 +1,12 @@
-package com.rljj.chatservice.global.config.dynamodb;
+package com.rljj.chatservice.domain.chat.controller;
 
+import com.rljj.chatservice.domain.chat.respository.ChatMessageRepository;
+import com.rljj.chatservice.domain.chat.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,9 +26,9 @@ public class ChatMessageController {
         return chatMessageRepository.getChatMessageById(chatMessageId);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        System.out.println("test!!!!!!!!!!!");
-        return ResponseEntity.ok("hi");
+    @GetMapping("/chatRoom/{chatRoomId}")
+    public List<ChatMessage> getChatRoomById(@PathVariable("chatRoomId") Long chatRoomId) {
+        return chatMessageRepository.getChatRoomById(chatRoomId);
     }
+
 }
