@@ -9,8 +9,6 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Repository
@@ -24,17 +22,6 @@ public class ChatMessageRepository {
 
     public void saveChatMessage(ChatMessage chatMessage) {
         chatMessageTable.putItem(chatMessage);
-    }
-
-    public static void main(String[] args) {
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(now);
-        System.out.println(now.format(DateTimeFormatter.ISO_DATE_TIME));
-    }
-
-    //조회하기
-    public ChatMessage getChatMessageById(String chatMessageId) {
-        return chatMessageTable.getItem(Key.builder().partitionValue(chatMessageId).build());
     }
 
     public List<ChatMessage> getChatRoomById(Long chatRoomId) {

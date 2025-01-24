@@ -21,11 +21,6 @@ public class ChatMessageController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/chatMessage/{chatMessageId}")
-    public ChatMessage getChatMessageById(@PathVariable("chatMessageId") String chatMessageId) {
-        return chatMessageRepository.getChatMessageById(chatMessageId);
-    }
-
     @GetMapping("/chatRoom/{chatRoomId}")
     public List<ChatMessage> getChatRoomById(@PathVariable("chatRoomId") Long chatRoomId) {
         return chatMessageRepository.getChatRoomById(chatRoomId);
