@@ -18,9 +18,9 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
+        String email = authentication.getName();
         String password = authentication.getCredentials().toString();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         return checkPassword(userDetails, password);
     }
 
