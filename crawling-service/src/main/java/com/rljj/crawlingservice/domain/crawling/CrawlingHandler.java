@@ -26,10 +26,10 @@ public class CrawlingHandler {
      * 기본: 새벽 3시에 작업 시작
      */
 //    바로 실행해보고 싶으면 fixedRate로 설정
-//    @Scheduled(fixedRate = 1000000)
-    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(fixedRate = 1000000)
+//    @Scheduled(cron = "0 0 3 * * ?")
     public void crawl() {
-//        if (isFirst()) initialize();
+        if (isFirst()) initialize();
 //        if (isOutdated()) update();
     }
 
@@ -40,7 +40,8 @@ public class CrawlingHandler {
     private void initialize() {
         log.info("Starts the crawl initialization. URL: {}", baseUrl);
         try {
-            int pageSize = getPageSize();
+//            int pageSize = getPageSize();
+            int pageSize = 10;
             String url = getUrlWithPage();
 
             for (int i = pageSize; i > 0; i--) { // 오래된 순부터
