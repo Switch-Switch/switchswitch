@@ -2,15 +2,15 @@ package com.rljj.chipservice.domain.post.service;
 
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.chipservice.domain.post.dto.PostRequest;
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface PostService {
 
-    List<ChipPost> getPosts(int page, int size);
+    Page<ChipPost> getPosts(int page, int size);
 
     ChipPost createPost(PostRequest request);
 
-    ChipPost getPostById(Long id);
+    ChipPost getPost(Long id);
 
     ChipPost updatePost(Long id, PostRequest request);
 
