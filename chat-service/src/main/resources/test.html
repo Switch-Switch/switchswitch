@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+
+<h2>WebSocket 테스트</h2>
+<button onclick="connectWebSocket()">WebSocket 연결</button>
+
+<script>
+    function connectWebSocket() {
+        const socket = new SockJS("http://localhost:8085/chat");  // SockJS WebSocket 연결
+        const stompClient = Stomp.over(socket);  // STOMP 프로토콜 사용
+
+        stompClient.connect({}, function (frame) {
+            console.log("Connected: " + frame);
+
+            // 메시지 구독 (예: /sub/1 채널)
+            stompClient.subscribe("/sub/1", function (message) {
+                console.log("Received: " + message.body);
+            });
+
+            // 메시지 전송
+            stompClient.send("/pub/messages", {}, JSON.stringify({
+                chatNo: "1",
+                sender: "user1",
+                message: "Hello WebSocket!"
+            }));
+        });
+    }
+</script>
+
+</body>
+</html>
