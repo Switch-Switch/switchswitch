@@ -1,10 +1,10 @@
 package com.rljj.memberservice.global.config.security;
 
+import com.rljj.switchswitchcommon.jwt.JwtAuthenticationFilter;
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.memberservice.domain.auth.service.AuthLogoutHandler;
 import com.rljj.memberservice.domain.auth.service.AuthService;
 import com.rljj.memberservice.domain.member.service.MemberService;
-import com.rljj.memberservice.global.config.jwt.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -75,6 +75,6 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtProvider, userDetailsService(), memberService);
+        return new JwtAuthenticationFilter(jwtProvider);
     }
 }

@@ -1,6 +1,6 @@
 package com.rljj.memberservice.domain.member.service;
 
-import com.rljj.switchswitchcommon.exception.UserNotFoundException;
+import com.rljj.switchswitchcommon.exception.NotFoundException;
 import com.rljj.switchswitchentity.member.Member;
 import com.rljj.memberservice.domain.auth.dto.SignupRequest;
 import com.rljj.memberservice.domain.member.repository.MemberRepository;
@@ -26,13 +26,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member getMember(String email) {
-        return getOpMemberByName(email).orElseThrow(() -> new UserNotFoundException(email));
+        return getOpMemberByName(email).orElseThrow(() -> new NotFoundException("Not Found User: " + email));
     }
 
     @Override
     public Member getMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(String.valueOf(id)));
+                .orElseThrow(() -> new NotFoundException("Not Found User: " + id));
     }
 
     @Override
