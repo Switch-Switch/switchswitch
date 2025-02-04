@@ -39,13 +39,13 @@ public class PostController {
 
     // 게시물 수정
     @PutMapping("/post/{chipPostId}")
-    public ChipPost updatePost(@PathVariable Long postId, @RequestBody PostRequest request) {
-        return postService.updatePost(postId, request);
+    public ChipPost updatePost(@PathVariable Long chipPostId, @RequestBody PostRequest request) {
+        return postService.updatePost(chipPostId, request);
     }
 
     // 게시물 삭제
     @DeleteMapping("/post/{chipPostId}")
-    public void deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public void deletePost(@PathVariable Long chipPostId) {
+        postService.deletePost(chipPostId);
     }
 }
