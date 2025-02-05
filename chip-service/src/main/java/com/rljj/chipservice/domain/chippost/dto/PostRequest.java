@@ -1,4 +1,4 @@
-package com.rljj.chipservice.domain.post.dto;
+package com.rljj.chipservice.domain.chippost.dto;
 
 import lombok.*;
 

@@ -1,8 +1,8 @@
-package com.rljj.chipservice.domain.post.service;
+package com.rljj.chipservice.domain.chippost.service;
 
-import com.rljj.chipservice.domain.post.dto.PostDataResponse;
-import com.rljj.chipservice.domain.post.dto.PostRequest;
-import com.rljj.chipservice.domain.post.repository.PostRepository;
+import com.rljj.chipservice.domain.chippost.dto.PostRequest;
+import com.rljj.chipservice.domain.chippost.dto.PostResponse;
+import com.rljj.chipservice.domain.chippost.repository.PostRepository;
 import com.rljj.switchswitchcommon.exception.NotFoundException;
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
@@ -16,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -24,22 +27,22 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
-    public PostDataResponse<Page<ChipPost>> getPosts(int page, int size) {
+    public Page<PostResponse> getPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate").descending());
         Page<ChipPost> posts = postRepository.findAll(pageable);
-        return PostDataResponse.of(posts);
+        return posts.map(PostResponse::from);
     }
 
     @Override
-    public PostDataResponse<ChipPost> getPost(Long id) {
+    public PostResponse getPost(Long id) {
         ChipPost post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
-        return PostDataResponse.of(post);
+        return PostResponse.from(post);
     }
 
     @Override
     @Transactional
-    public PostDataResponse<ChipPost> createPost(PostRequest request) {
+    public PostResponse createPost(PostRequest request) {
         Member member = Member.builder()
                 .id(request.getMemberId())
                 .build();
@@ -55,12 +58,12 @@ public class PostServiceImpl implements PostService {
                 .status(ChipPostStatus.valueOf(request.getStatus()))
                 .build();
 
-        return PostDataResponse.of(postRepository.save(newPost));
+        return PostResponse.from(postRepository.save(newPost));
     }
 
     @Override
     @Transactional
-    public PostDataResponse<ChipPost> updatePost(Long chipPostId, PostRequest request) {
+    public PostResponse updatePost(Long chipPostId, PostRequest request) {
         ChipPost existingPost = postRepository.findById(chipPostId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + chipPostId));
 
@@ -70,16 +73,15 @@ public class PostServiceImpl implements PostService {
                 request.getStatus()
         );
 
-        return PostDataResponse.of(existingPost);
+        return PostResponse.from(existingPost);
     }
 
     @Override
     @Transactional
-    public PostDataResponse<Void> deletePost(Long id) {
+    public void deletePost(Long id) {
         if (!postRepository.existsById(id)) {
             throw new NotFoundException(String.valueOf(id));
         }
         postRepository.deleteById(id);
-        return PostDataResponse.empty();
     }
 }

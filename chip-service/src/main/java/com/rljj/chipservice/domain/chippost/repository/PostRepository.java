@@ -1,4 +1,4 @@
-package com.rljj.chipservice.domain.post.repository;
+package com.rljj.chipservice.domain.chippost.repository;
 
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import org.springframework.data.jpa.repository.JpaRepository;
