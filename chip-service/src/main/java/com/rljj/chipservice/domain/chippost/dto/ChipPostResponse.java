@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponse {
+public class ChipPostResponse {
     private Long id;
     private Long chipInfoId;
     private Long memberId;
@@ -14,14 +14,13 @@ public class PostResponse {
     private String description;
     private String status;
 
-    public static PostResponse from(ChipPost chipPost) {
-        return new PostResponse(
+    public static ChipPostResponse from(ChipPost chipPost) {
+        return new ChipPostResponse(
                 chipPost.getId(),
                 chipPost.getChipInfo().getId(),
                 chipPost.getMember().getId(),
                 chipPost.getTitle(),
                 chipPost.getDescription(),
-                chipPost.getStatus().name()
-        );
+                chipPost.getStatus().name());
     }
 }

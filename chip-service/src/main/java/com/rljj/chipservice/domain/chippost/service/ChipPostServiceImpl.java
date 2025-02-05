@@ -1,48 +1,47 @@
 package com.rljj.chipservice.domain.chippost.service;
 
-import com.rljj.chipservice.domain.chippost.dto.PostRequest;
-import com.rljj.chipservice.domain.chippost.dto.PostResponse;
-import com.rljj.chipservice.domain.chippost.repository.PostRepository;
+import com.rljj.chipservice.domain.chipinfo.service.ChipInfoService;
+import com.rljj.chipservice.domain.chippost.dto.ChipPostRequest;
+import com.rljj.chipservice.domain.chippost.dto.ChipPostResponse;
+import com.rljj.chipservice.domain.chippost.repository.ChipPostRepository;
 import com.rljj.switchswitchcommon.exception.NotFoundException;
-import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
-import com.rljj.switchswitchentity.member.Member;
+import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.chip.chippost.ChipPostStatus;
+import com.rljj.switchswitchentity.member.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class PostServiceImpl implements PostService {
+public class ChipPostServiceImpl implements ChipPostService {
 
-    private final PostRepository postRepository;
+    private final ChipPostRepository postRepository;
+    private final ChipInfoService chipInfoService;
 
     @Override
-    public Page<PostResponse> getPosts(int page, int size) {
+    public Page<ChipPostResponse> getPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate").descending());
         Page<ChipPost> posts = postRepository.findAll(pageable);
-        return posts.map(PostResponse::from);
+        return posts.map(ChipPostResponse::from);
     }
 
     @Override
-    public PostResponse getPost(Long id) {
+    public ChipPostResponse getPost(Long id) {
         ChipPost post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
-        return PostResponse.from(post);
+        return ChipPostResponse.from(post);
     }
 
     @Override
     @Transactional
-    public PostResponse createPost(PostRequest request) {
+    public ChipPostResponse createPost(ChipPostRequest request) {
         Member member = Member.builder()
                 .id(request.getMemberId())
                 .build();
@@ -58,22 +57,18 @@ public class PostServiceImpl implements PostService {
                 .status(ChipPostStatus.valueOf(request.getStatus()))
                 .build();
 
-        return PostResponse.from(postRepository.save(newPost));
+        return ChipPostResponse.from(postRepository.save(newPost));
     }
 
     @Override
     @Transactional
-    public PostResponse updatePost(Long chipPostId, PostRequest request) {
+    public ChipPostResponse updatePost(Long chipPostId, ChipPostRequest request) {
         ChipPost existingPost = postRepository.findById(chipPostId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + chipPostId));
 
-        existingPost.update(
-                request.getTitle(),
-                request.getDescription(),
-                request.getStatus()
-        );
+        existingPost.update(request.getTitle(), request.getDescription(), request.getStatus());
 
-        return PostResponse.from(existingPost);
+        return ChipPostResponse.from(existingPost);
     }
 
     @Override

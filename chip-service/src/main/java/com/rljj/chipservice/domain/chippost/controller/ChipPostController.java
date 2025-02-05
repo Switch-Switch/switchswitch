@@ -1,9 +1,8 @@
 package com.rljj.chipservice.domain.chippost.controller;
 
-import com.rljj.chipservice.domain.chippost.dto.PostRequest;
-import com.rljj.chipservice.domain.chippost.dto.PostResponse;
-import com.rljj.chipservice.domain.chippost.service.PostServiceImpl;
-import com.rljj.switchswitchentity.chip.chippost.ChipPost;
+import com.rljj.chipservice.domain.chippost.dto.ChipPostRequest;
+import com.rljj.chipservice.domain.chippost.dto.ChipPostResponse;
+import com.rljj.chipservice.domain.chippost.service.ChipPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,29 +11,30 @@ import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/api/chip")
 @RequiredArgsConstructor
-public class PostController {
-    private final PostServiceImpl postService;
+public class ChipPostController {
+
+    private final ChipPostService postService;
 
     @GetMapping("/posts")
-    public ResponseEntity<Page<PostResponse>> getPosts(
+    public ResponseEntity<Page<ChipPostResponse>> getPosts(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "30") int size) {
         return ResponseEntity.ok(postService.getPosts(page, size));
     }
 
     @GetMapping("/post/{chipPostId}")
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long chipPostId) {
+    public ResponseEntity<ChipPostResponse> getPost(@PathVariable Long chipPostId) {
         return ResponseEntity.ok(postService.getPost(chipPostId));
     }
 
     @PostMapping("/post")
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest request) {
+    public ResponseEntity<ChipPostResponse> createPost(@RequestBody ChipPostRequest request) {
         return ResponseEntity.ok(postService.createPost(request));
     }
 
-    @PutMapping("/post/{chipPostId}")
-    public ResponseEntity<PostResponse> updatePost(
-            @PathVariable Long chipPostId, @RequestBody PostRequest request) {
+    @PatchMapping("/post/{chipPostId}")
+    public ResponseEntity<ChipPostResponse> updatePost(
+            @PathVariable Long chipPostId, @RequestBody ChipPostRequest request) {
         return ResponseEntity.ok(postService.updatePost(chipPostId, request));
     }
 

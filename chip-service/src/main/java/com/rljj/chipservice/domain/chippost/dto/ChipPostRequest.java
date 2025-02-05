@@ -5,7 +5,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostRequest {
+public class ChipPostRequest {
     private Long chipInfoId;
     private Long memberId;
     private String title;
