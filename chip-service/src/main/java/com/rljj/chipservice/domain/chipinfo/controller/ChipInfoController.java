@@ -13,9 +13,8 @@ public class ChipInfoController {
 
     private final ChipInfoService chipInfoService;
 
-    @GetMapping("/{chipName}")
-    public ChipInfoResponse getChipInfo(@PathVariable String chipName) {
-        return chipInfoService.getChipInfo(chipName);
+    @GetMapping("/{chipInfoId}")
+    public ChipInfoResponse getChipInfo(@PathVariable Long chipInfoId) {
+        return chipInfoService.getChipInfo(chipInfoId);
     }
-
 }

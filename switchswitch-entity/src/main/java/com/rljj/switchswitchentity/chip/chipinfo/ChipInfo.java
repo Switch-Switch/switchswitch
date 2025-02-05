@@ -3,12 +3,13 @@ package com.rljj.switchswitchentity.chip.chipinfo;
 import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Table(indexes = {
         @Index(name = "idx_name", columnList = "name")
 })
