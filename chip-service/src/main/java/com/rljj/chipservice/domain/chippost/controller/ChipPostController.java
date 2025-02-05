@@ -4,9 +4,9 @@ import com.rljj.chipservice.domain.chippost.dto.ChipPostRequest;
 import com.rljj.chipservice.domain.chippost.dto.ChipPostResponse;
 import com.rljj.chipservice.domain.chippost.service.ChipPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/chip")

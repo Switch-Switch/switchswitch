@@ -5,12 +5,13 @@ import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
 import com.rljj.switchswitchentity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ChipPost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @NonNull
@@ -30,9 +31,9 @@ public class ChipPost extends BaseEntity {
     @NonNull
     private ChipPostStatus status;
 
-    public void update(String title, String description, String status) {
+    public void update(String title, String description, ChipPostStatus status) {
         this.title = title;
         this.description = description;
-        this.status = ChipPostStatus.valueOf(status);
+        this.status = status;
     }
 }

@@ -42,19 +42,15 @@ public class ChipPostServiceImpl implements ChipPostService {
     @Override
     @Transactional
     public ChipPostResponse createPost(ChipPostRequest request) {
-        Member member = Member.builder()
-                .id(request.getMemberId())
-                .build();
-        ChipInfo chipInfo = ChipInfo.builder()
-                .id(request.getChipInfoId())
-                .build();
+        Member member = Member.builder().id(request.getMemberId()).build();
+        ChipInfo chipInfo = ChipInfo.builder().id(request.getChipInfoId()).build();
 
         ChipPost newPost = ChipPost.builder()
                 .chipInfo(chipInfo)
                 .member(member)
                 .title(request.getTitle())
                 .description(request.getDescription())
-                .status(ChipPostStatus.valueOf(request.getStatus()))
+                .status(request.getStatus())
                 .build();
 
         return ChipPostResponse.from(postRepository.save(newPost));
