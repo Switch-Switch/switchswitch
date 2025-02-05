@@ -30,4 +30,8 @@ public class ChipExchange extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NonNull
     private ChipExchangeStatus status;
+
+    public void updateStatus(ChipExchangeStatus status) {
+        this.status = status;
+    }
 }

@@ -25,4 +25,8 @@ public class ChipInfo extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NonNull
     private ConsoleModel consoleModel;
+
+    public static ChipInfo emptyEntity(Long id) {
+        return ChipInfo.builder().id(id).build();
+    }
 }
