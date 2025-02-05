@@ -1,9 +1,9 @@
-package com.rljj.chipservice.domain.exchange.controller;
+package com.rljj.chipservice.domain.chipexchange.controller;
 
-import com.rljj.chipservice.domain.exchange.dto.ChipExchangeCreateRequest;
-import com.rljj.chipservice.domain.exchange.dto.ChipExchangeResponse;
-import com.rljj.chipservice.domain.exchange.dto.ChipExchangeStatusUpdateRequest;
-import com.rljj.chipservice.domain.exchange.service.ChipExchangeService;
+import com.rljj.chipservice.domain.chipexchange.dto.ChipExchangeCreateRequest;
+import com.rljj.chipservice.domain.chipexchange.dto.ChipExchangeResponse;
+import com.rljj.chipservice.domain.chipexchange.dto.ChipExchangeStatusUpdateRequest;
+import com.rljj.chipservice.domain.chipexchange.service.ChipExchangeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

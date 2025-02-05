@@ -1,8 +1,8 @@
-package com.rljj.chipservice.domain.exchange.service;
+package com.rljj.chipservice.domain.chipexchange.service;
 
-import com.rljj.chipservice.domain.exchange.dto.ChipExchangeCreateRequest;
-import com.rljj.chipservice.domain.exchange.dto.ChipExchangeResponse;
-import com.rljj.chipservice.domain.exchange.dto.ChipExchangeStatusUpdateRequest;
+import com.rljj.chipservice.domain.chipexchange.dto.ChipExchangeCreateRequest;
+import com.rljj.chipservice.domain.chipexchange.dto.ChipExchangeResponse;
+import com.rljj.chipservice.domain.chipexchange.dto.ChipExchangeStatusUpdateRequest;
 import com.rljj.switchswitchentity.chip.chipexchange.ChipExchange;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

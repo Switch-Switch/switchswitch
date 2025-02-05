@@ -6,12 +6,13 @@ import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ChipExchange extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @NonNull

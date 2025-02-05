@@ -1,4 +1,4 @@
-package com.rljj.chipservice.domain.exchange.repository;
+package com.rljj.chipservice.domain.chipexchange.repository;
 
 import com.rljj.switchswitchentity.chip.chipexchange.ChipExchange;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.rljj.chipservice.domain.exchange.dto;
+package com.rljj.chipservice.domain.chipexchange.dto;
 
 import com.rljj.chipservice.domain.chipinfo.dto.ChipInfoResponse;
 import com.rljj.switchswitchentity.chip.chipexchange.ChipExchange;
