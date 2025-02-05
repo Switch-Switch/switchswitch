@@ -1,8 +1,6 @@
 package com.rljj.chatservice.domain.chat.controller;
 
-import com.rljj.chatservice.domain.chat.dto.ChatRoomRequest;
-import com.rljj.chatservice.domain.chat.dto.ChatRoomResponse;
-import com.rljj.chatservice.domain.chat.dto.Message;
+import com.rljj.chatservice.domain.chat.dto.*;
 import com.rljj.chatservice.domain.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +28,23 @@ public class ChatController {
     // TODO 일단 all 조회로 만들기 -> 페이징 처리 어캐 할지
     // 채팅방 리스트 조회하기
     @GetMapping("/rooms")
-    public ResponseEntity<List<ChatRoomResponse>> chatRoomList(
+    public ResponseEntity<List<ChatRoomResponse>> getChatRoomList(
             @RequestParam Long memberId) {
         List<ChatRoomResponse> chatRoomList = chatService.getChatRoomList(memberId);
         return ResponseEntity.ok(chatRoomList);
     }
 
-    // 채팅방 삭제하기
-
-    // 채팅방 접속 끊기
+    // TODO 채팅방 삭제하기
+    // TODO 채팅방 접속 끊기
 
     // 채팅메시지 내역 조회하기
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<ChatMessageListResponse> getChatMessageList(
+            @PathVariable("roomId") Long roomId,
+            @RequestParam Long memberId) {
+        ChatMessageListResponse chatMessageList = chatService.getChatMessageList(roomId, memberId);
+        return ResponseEntity.ok(chatMessageList);
+    }
 
     // 채팅메시지 보내기
     @MessageMapping("/messages")
