@@ -37,5 +37,4 @@ public class ChipExchangeController {
         chipExchangeService.updateStatus(request);
         return ResponseEntity.ok().build();
     }
-
 }

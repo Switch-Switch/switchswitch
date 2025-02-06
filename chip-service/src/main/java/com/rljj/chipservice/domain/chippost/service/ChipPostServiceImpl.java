@@ -1,13 +1,11 @@
 package com.rljj.chipservice.domain.chippost.service;
 
-import com.rljj.chipservice.domain.chipinfo.service.ChipInfoService;
 import com.rljj.chipservice.domain.chippost.dto.ChipPostRequest;
 import com.rljj.chipservice.domain.chippost.dto.ChipPostResponse;
 import com.rljj.chipservice.domain.chippost.repository.ChipPostRepository;
 import com.rljj.switchswitchcommon.exception.NotFoundException;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
-import com.rljj.switchswitchentity.chip.chippost.ChipPostStatus;
 import com.rljj.switchswitchentity.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChipPostServiceImpl implements ChipPostService {
 
     private final ChipPostRepository postRepository;
-    private final ChipInfoService chipInfoService;
 
     @Override
     public Page<ChipPostResponse> getPosts(int page, int size) {
