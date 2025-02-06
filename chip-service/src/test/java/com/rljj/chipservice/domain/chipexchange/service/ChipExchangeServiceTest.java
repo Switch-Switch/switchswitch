@@ -41,36 +41,37 @@ public class ChipExchangeServiceTest {
 
     private User testUser;
 
+    private ChipPostResponse postResponse;
+
     @BeforeEach
     void setUp() {
-        initChipPost();
+        postResponse = initChipPost();
         initUser();
     }
 
     @Test
     void testChipPostExist() {
-        ChipPostResponse post = chipPostService.getPost(1L);
-        assertThat(post).isNotNull();
+        ChipPostResponse postResponse = chipPostService.getPost(1L);
+        assertThat(postResponse).isNotNull();
     }
 
     @Test
     void testChipExchangeSave() {
         // given
-        ChipPostResponse post = chipPostService.getPost(1L);
-        ChipExchangeCreateRequest request = getChipExchangeCreateRequest(post.getId(), post.getChipInfoId());
+        ChipExchangeCreateRequest request = getChipExchangeCreateRequest(postResponse.getId(), postResponse.getChipInfoId());
 
         // when
-        chipExchangeService.createChipExchange(testUser, request);
-        Page<ChipExchangeResponse> chipExchanges = chipExchangeService.getChipExchanges(post.getId(), Pageable.ofSize(10));
+        chipExchangeService.createChipExchange(Long.parseLong(testUser.getUsername()), request);
+        Page<ChipExchangeResponse> chipExchanges = chipExchangeService.getChipExchanges(postResponse.getId(), Pageable.ofSize(10));
 
         // then
         assertThat(chipExchanges.getTotalElements()).isEqualTo(1);
         assertThatIterator(chipExchanges.iterator()).isNotNull();
     }
 
-    private void initChipPost() {
+    private ChipPostResponse initChipPost() {
         ChipPostRequest request = new ChipPostRequest(1L, 1L, "test post", "test desc", ChipPostStatus.OPEN);
-        chipPostService.createPost(request);
+        return chipPostService.createPost(request);
     }
 
     private void initUser() {
