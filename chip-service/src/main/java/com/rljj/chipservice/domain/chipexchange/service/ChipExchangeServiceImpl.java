@@ -32,10 +32,10 @@ public class ChipExchangeServiceImpl implements ChipExchangeService {
 
     @Override
     @Transactional
-    public void createChipExchange(UserDetails userDetails, ChipExchangeCreateRequest request) {
-        ChipInfo chipInfo = ChipInfo.builder().id(request.getChipInfoId()).build();
-        ChipPost chipPost = ChipPost.builder().id(request.getChipPostId()).build();
-        Member member = Member.builder().id(Long.parseLong(userDetails.getUsername())).build();
+    public void createChipExchange(Long memberId, ChipExchangeCreateRequest request) {
+        ChipInfo chipInfo = ChipInfo.of(request.getChipInfoId());
+        ChipPost chipPost = ChipPost.of(request.getChipPostId());
+        Member member = Member.of(memberId);
 
         chipExchangeRepository.save(ChipExchange.builder()
                 .chipPost(chipPost)

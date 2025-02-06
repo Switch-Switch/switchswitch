@@ -30,17 +30,16 @@ public class ChipPostServiceImpl implements ChipPostService {
     }
 
     @Override
-    public ChipPostResponse getPost(Long id) {
-        ChipPost post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
+    public ChipPostResponse getPost(Long chipPostId) {
+        ChipPost post = getChipPost(chipPostId);
         return ChipPostResponse.from(post);
     }
 
     @Override
     @Transactional
     public ChipPostResponse createPost(ChipPostRequest request) {
-        Member member = Member.builder().id(request.getMemberId()).build();
-        ChipInfo chipInfo = ChipInfo.builder().id(request.getChipInfoId()).build();
+        Member member = Member.of(request.getMemberId());
+        ChipInfo chipInfo = ChipInfo.of(request.getChipInfoId());
 
         ChipPost newPost = ChipPost.builder()
                 .chipInfo(chipInfo)
@@ -56,8 +55,7 @@ public class ChipPostServiceImpl implements ChipPostService {
     @Override
     @Transactional
     public ChipPostResponse updatePost(Long chipPostId, ChipPostRequest request) {
-        ChipPost existingPost = postRepository.findById(chipPostId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + chipPostId));
+        ChipPost existingPost = getChipPost(chipPostId);
 
         existingPost.update(request.getTitle(), request.getDescription(), request.getStatus());
 
@@ -66,10 +64,15 @@ public class ChipPostServiceImpl implements ChipPostService {
 
     @Override
     @Transactional
-    public void deletePost(Long id) {
-        if (!postRepository.existsById(id)) {
-            throw new NotFoundException(String.valueOf(id));
+    public void deletePost(Long chipPostId) {
+        if (!postRepository.existsById(chipPostId)) {
+            throw new NotFoundException(String.valueOf(chipPostId));
         }
-        postRepository.deleteById(id);
+        postRepository.deleteById(chipPostId);
+    }
+
+    private ChipPost getChipPost(Long chipPostId) {
+        return postRepository.findById(chipPostId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + chipPostId));
     }
 }

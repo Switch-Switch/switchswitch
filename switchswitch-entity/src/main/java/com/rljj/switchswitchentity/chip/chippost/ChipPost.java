@@ -38,4 +38,8 @@ public class ChipPost extends BaseEntity {
         this.description = description;
         this.status = status;
     }
+
+    public static ChipPost of(Long id) {
+        return ChipPost.builder().id(id).build();
+    }
 }

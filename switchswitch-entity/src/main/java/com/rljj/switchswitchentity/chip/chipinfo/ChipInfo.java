@@ -31,4 +31,8 @@ public class ChipInfo extends BaseEntity {
     public static ChipInfo emptyEntity(Long id) {
         return ChipInfo.builder().id(id).build();
     }
+
+    public static ChipInfo of(Long chipInfoId) {
+        return ChipInfo.builder().id(chipInfoId).build();
+    }
 }

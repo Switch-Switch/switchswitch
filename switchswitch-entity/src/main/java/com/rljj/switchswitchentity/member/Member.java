@@ -24,4 +24,8 @@ public class Member extends BaseEntity {
 
     @NotNull
     private String password;
+
+    public static Member of(Long id) {
+        return Member.builder().id(id).build();
+    }
 }
