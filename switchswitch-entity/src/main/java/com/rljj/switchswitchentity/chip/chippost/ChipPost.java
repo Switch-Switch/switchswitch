@@ -30,4 +30,10 @@ public class ChipPost extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NonNull
     private ChipPostStatus status;
+
+    public void update(String title, String description, ChipPostStatus status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
 }
