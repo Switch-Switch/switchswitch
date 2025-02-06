@@ -103,18 +103,12 @@ public class JwtProviderImpl implements JwtProvider {
 
     @Override
     public void validateJwt(String jwt) {
-        try {
-            Jwts.parser()
-                    .verifyWith(getSecretKey())
-                    .build()
-                    .parseSignedClaims(jwt)
-                    .getPayload()
-                    .getExpiration();
-        } catch (SignatureException | MalformedJwtException |
-                 UnsupportedJwtException | IllegalArgumentException |
-                 ExpiredJwtException jwtException) {
-            throw jwtException;
-        }
+        Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(jwt)
+                .getPayload()
+                .getExpiration();
     }
 
     @Override
