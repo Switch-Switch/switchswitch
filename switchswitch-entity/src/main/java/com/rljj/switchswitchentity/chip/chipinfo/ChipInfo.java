@@ -2,6 +2,7 @@ package com.rljj.switchswitchentity.chip.chipinfo;
 
 import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,17 +15,17 @@ import lombok.experimental.SuperBuilder;
         @Index(name = "idx_name", columnList = "name")
 })
 public class ChipInfo extends BaseEntity {
-    @NonNull
+    @NotNull
     private String name;
 
-    @NonNull
+    @NotNull
     private String imageUrl;
 
-    @NonNull
+    @NotNull
     private String price;
 
     @Enumerated(EnumType.STRING)
-    @NonNull
+    @NotNull
     private ConsoleModel consoleModel;
 
     public static ChipInfo emptyEntity(Long id) {

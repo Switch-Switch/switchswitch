@@ -4,6 +4,7 @@ import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
 import com.rljj.switchswitchentity.member.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,21 +15,22 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ChipPost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @NonNull
+    @NotNull
     private ChipInfo chipInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NonNull
+    @NotNull
     private Member member;
 
-    @NonNull
+    @NotNull
+    @Column(nullable = false)
     private String title;
 
-    @NonNull
+    @NotNull
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @NonNull
+    @NotNull
     private ChipPostStatus status;
 
     public void update(String title, String description, ChipPostStatus status) {
