@@ -70,8 +70,8 @@ public class ChipExchangeServiceTest {
     }
 
     private ChipPostResponse initChipPost() {
-        ChipPostRequest request = new ChipPostRequest(1L, 1L, "test post", "test desc", ChipPostStatus.OPEN);
-        return chipPostService.createPost(request);
+        ChipPostRequest request = new ChipPostRequest(1L, "test post", "test desc", ChipPostStatus.OPEN);
+        return chipPostService.createPost(1L, request);
     }
 
     private void initUser() {

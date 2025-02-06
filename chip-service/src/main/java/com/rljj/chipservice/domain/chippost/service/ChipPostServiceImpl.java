@@ -3,7 +3,7 @@ package com.rljj.chipservice.domain.chippost.service;
 import com.rljj.chipservice.domain.chippost.dto.ChipPostRequest;
 import com.rljj.chipservice.domain.chippost.dto.ChipPostResponse;
 import com.rljj.chipservice.domain.chippost.repository.ChipPostRepository;
-import com.rljj.switchswitchcommon.exception.NotFoundException;
+import com.rljj.switchswitchcommon.exception.ForbiddenException;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.member.Member;
@@ -37,8 +37,8 @@ public class ChipPostServiceImpl implements ChipPostService {
 
     @Override
     @Transactional
-    public ChipPostResponse createPost(ChipPostRequest request) {
-        Member member = Member.of(request.getMemberId());
+    public ChipPostResponse createPost(Long memberId, ChipPostRequest request) {
+        Member member = Member.of(memberId);
         ChipInfo chipInfo = ChipInfo.of(request.getChipInfoId());
 
         ChipPost newPost = ChipPost.builder()
@@ -54,25 +54,28 @@ public class ChipPostServiceImpl implements ChipPostService {
 
     @Override
     @Transactional
-    public ChipPostResponse updatePost(Long chipPostId, ChipPostRequest request) {
-        ChipPost existingPost = getChipPost(chipPostId);
-
-        existingPost.update(request.getTitle(), request.getDescription(), request.getStatus());
-
-        return ChipPostResponse.from(existingPost);
+    public ChipPostResponse updatePost(Long memberId, Long chipPostId, ChipPostRequest request) {
+        ChipPost post = getChipPost(chipPostId);
+        validateChipPostOwner(memberId, post);
+        post.update(request.getTitle(), request.getDescription(), request.getStatus());
+        return ChipPostResponse.from(post);
     }
 
     @Override
     @Transactional
-    public void deletePost(Long chipPostId) {
-        if (!postRepository.existsById(chipPostId)) {
-            throw new NotFoundException(String.valueOf(chipPostId));
-        }
-        postRepository.deleteById(chipPostId);
+    public void deletePost(Long memberId, Long chipPostId) {
+        ChipPost post = getChipPost(chipPostId);
+        validateChipPostOwner(memberId, post);
+        postRepository.delete(post);
     }
 
     private ChipPost getChipPost(Long chipPostId) {
         return postRepository.findById(chipPostId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + chipPostId));
+    }
+
+    private void validateChipPostOwner(Long memberId, ChipPost post) {
+        if (!post.getMember().getId().equals(memberId))
+            throw new ForbiddenException("Forbidden member id", String.valueOf(memberId));
     }
 }

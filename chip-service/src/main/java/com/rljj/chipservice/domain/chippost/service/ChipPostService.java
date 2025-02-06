@@ -10,9 +10,9 @@ public interface ChipPostService {
 
     ChipPostResponse getPost(Long chipPostId);
 
-    ChipPostResponse createPost(ChipPostRequest request);
+    ChipPostResponse createPost(Long memberId, ChipPostRequest request);
 
-    ChipPostResponse updatePost(Long chipPostId, ChipPostRequest request);
+    ChipPostResponse updatePost(Long memberId, Long chipPostId, ChipPostRequest request);
 
-    void deletePost(Long chipPostId);
+    void deletePost(Long memberId, Long chipPostId);
 }

@@ -1,2 +1,11 @@
-package com.rljj.switchswitchcommon.exception;public class Forbidden {
+package com.rljj.switchswitchcommon.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class ForbiddenException extends RuntimeException {
+    public ForbiddenException(String message, String content) {
+        super(message + ": " + content);
+    }
 }

@@ -6,6 +6,8 @@ import com.rljj.chipservice.domain.chippost.service.ChipPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,19 +30,25 @@ public class ChipPostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ChipPostResponse> createPost(@RequestBody ChipPostRequest request) {
-        return ResponseEntity.ok(postService.createPost(request));
+    public ResponseEntity<ChipPostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails,
+                                                       @RequestBody ChipPostRequest request) {
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        return ResponseEntity.ok(postService.createPost(memberId, request));
     }
 
     @PatchMapping("/post/{chipPostId}")
-    public ResponseEntity<ChipPostResponse> updatePost(
-            @PathVariable Long chipPostId, @RequestBody ChipPostRequest request) {
-        return ResponseEntity.ok(postService.updatePost(chipPostId, request));
+    public ResponseEntity<ChipPostResponse> updatePost(@AuthenticationPrincipal UserDetails userDetails,
+                                                       @PathVariable Long chipPostId,
+                                                       @RequestBody ChipPostRequest request) {
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        return ResponseEntity.ok(postService.updatePost(memberId, chipPostId, request));
     }
 
     @DeleteMapping("/post/{chipPostId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long chipPostId) {
-        postService.deletePost(chipPostId);
+    public ResponseEntity<Void> deletePost(@AuthenticationPrincipal UserDetails userDetails,
+                                           @PathVariable Long chipPostId) {
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        postService.deletePost(memberId, chipPostId);
         return ResponseEntity.noContent().build();
     }
 }
