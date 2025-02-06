@@ -27,7 +27,8 @@ public class ChipExchangeController {
     @PostMapping
     public ResponseEntity<Void> createChipExchange(@AuthenticationPrincipal UserDetails userDetails,
                                                    @RequestBody ChipExchangeCreateRequest request) {
-        chipExchangeService.createChipExchange(userDetails, request);
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        chipExchangeService.createChipExchange(memberId, request);
         return ResponseEntity.ok().build();
     }
 
