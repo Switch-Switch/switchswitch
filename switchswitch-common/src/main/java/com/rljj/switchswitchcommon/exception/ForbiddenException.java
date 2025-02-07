@@ -3,9 +3,9 @@ package com.rljj.switchswitchcommon.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
-public class NotAuthorizationException extends RuntimeException {
-    public NotAuthorizationException(String message, String content) {
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class ForbiddenException extends RuntimeException {
+    public ForbiddenException(String message, String content) {
         super(message + ": " + content);
     }
 }
