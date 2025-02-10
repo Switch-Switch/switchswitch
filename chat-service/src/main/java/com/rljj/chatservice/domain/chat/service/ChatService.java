@@ -39,9 +39,9 @@ public class ChatService {
                 .map(chatRoom -> new ChatRoomResponse(
                         chatRoom.getId(),
                         memberId,  // 현재 로그인한 사용자 ID
-                        chatRoom.getCreatorUser().getId().equals(memberId)
-                                ? chatRoom.getInterestedUser().getId()  // 내가 creatorUser면 상대방 = interestedUser
-                                : chatRoom.getCreatorUser().getId(),     // 내가 interestedUser면 상대방 = creatorUser
+                        chatRoom.getAuthor().getId().equals(memberId)
+                                ? chatRoom.getRequester().getId()  // 내가 author 상대방 = requester
+                                : chatRoom.getAuthor().getId(),     // 내가 requester 상대방 = author
                         chatRoom.getChipPost().getId()
                 ))
                 .toList();

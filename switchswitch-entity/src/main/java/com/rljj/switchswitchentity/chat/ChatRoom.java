@@ -18,15 +18,13 @@ public class ChatRoom extends BaseEntity {
     @NotNull
     private ChipPost chipPost;
 
-    // TODO creatorUser -> author,
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Member creatorUser;
+    private Member author;
 
-    // TODO interestedUser -> requester로 이름 바꾸기
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Member interestedUser;
+    private Member requester;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -39,8 +37,8 @@ public class ChatRoom extends BaseEntity {
     @Builder
     private ChatRoom(ChipPost chipPost, Member author, Member requester) {
         this.chipPost = chipPost;
-        this.creatorUser = author;
-        this.interestedUser = requester;
+        this.author = author;
+        this.requester = requester;
         this.status = ChatRoomStatus.ACTIVE;
     }
     

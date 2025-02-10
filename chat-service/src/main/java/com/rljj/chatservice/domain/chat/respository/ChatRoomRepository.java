@@ -12,10 +12,10 @@ import java.util.List;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @Query("SELECT c FROM ChatRoom c " +
-            "JOIN FETCH c.creatorUser " +
-            "JOIN FETCH c.interestedUser " +
+            "JOIN FETCH c.author " +
+            "JOIN FETCH c.requester " +
             "JOIN FETCH c.chipPost " +
-            "WHERE c.creatorUser.id = :memberId OR c.interestedUser.id = :memberId")
+            "WHERE c.author.id = :memberId OR c.requester.id = :memberId")
     List<ChatRoom> findChatRoomsByMemberId(@Param("memberId") Long memberId);
 
 }
