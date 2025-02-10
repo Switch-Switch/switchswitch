@@ -3,6 +3,7 @@ package com.rljj.switchswitchentity.member;
 import com.rljj.switchswitchentity.baseentity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,13 +15,17 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Member extends BaseEntity {
     @Column(unique = true)
-    @NonNull
+    @NotNull
     private String email;
 
     @Column(unique = true)
-    @NonNull
+    @NotNull
     private String nickname;
 
-    @NonNull
+    @NotNull
     private String password;
+
+    public static Member of(Long id) {
+        return Member.builder().id(id).build();
+    }
 }

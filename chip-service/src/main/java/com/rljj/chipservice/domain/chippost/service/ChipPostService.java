@@ -8,11 +8,11 @@ public interface ChipPostService {
 
     Page<ChipPostResponse> getPosts(int page, int size);
 
-    ChipPostResponse getPost(Long id);
+    ChipPostResponse getPost(Long chipPostId);
 
-    ChipPostResponse createPost(ChipPostRequest request);
+    ChipPostResponse createPost(Long memberId, ChipPostRequest request);
 
-    ChipPostResponse updatePost(Long id, ChipPostRequest request);
+    ChipPostResponse updatePost(Long memberId, Long chipPostId, ChipPostRequest request);
 
-    void deletePost(Long id);
+    void deletePost(Long memberId, Long chipPostId);
 }

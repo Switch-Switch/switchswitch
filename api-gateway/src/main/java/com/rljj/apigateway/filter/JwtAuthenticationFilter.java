@@ -2,6 +2,7 @@ package com.rljj.apigateway.filter;
 
 import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchcommon.jwt.JwtRedisService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 return exchange.getResponse().setComplete();
             }
 
-            jwtProvider.validateJwt(jwt);
+            try {
+                jwtProvider.validateJwt(jwt);
+            } catch (ExpiredJwtException e) {
+                exchange.getResponse().setStatusCode(config.getUnauthorizedStatus());
+                return exchange.getResponse().setComplete();
+            }
 
             return chain.filter(exchange);
         };

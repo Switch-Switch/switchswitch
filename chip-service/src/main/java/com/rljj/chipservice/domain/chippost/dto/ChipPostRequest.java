@@ -13,9 +13,6 @@ public class ChipPostRequest {
     private Long chipInfoId;
 
     @NotBlank
-    private Long memberId;
-
-    @NotBlank
     @Size(min = 1, max = 30)
     private String title;
 
