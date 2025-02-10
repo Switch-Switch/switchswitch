@@ -4,6 +4,7 @@ import com.rljj.chipservice.domain.chippost.dto.ChipPostRequest;
 import com.rljj.chipservice.domain.chippost.dto.ChipPostResponse;
 import com.rljj.chipservice.domain.chippost.repository.ChipPostRepository;
 import com.rljj.switchswitchcommon.exception.ForbiddenException;
+import com.rljj.switchswitchcommon.exception.NotFoundException;
 import com.rljj.switchswitchentity.chip.chipinfo.ChipInfo;
 import com.rljj.switchswitchentity.chip.chippost.ChipPost;
 import com.rljj.switchswitchentity.member.Member;
@@ -71,7 +72,7 @@ public class ChipPostServiceImpl implements ChipPostService {
 
     private ChipPost getChipPost(Long chipPostId) {
         return postRepository.findById(chipPostId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid post ID:" + chipPostId));
+                .orElseThrow(() -> new NotFoundException("Invalid post ID:" + chipPostId));
     }
 
     private void validateChipPostOwner(Long memberId, ChipPost post) {
