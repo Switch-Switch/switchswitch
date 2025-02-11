@@ -1,6 +1,8 @@
 package com.rljj.chatservice.global.config.websocket;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -8,8 +10,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSocketMessageBroker
-public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final StompHandler stompHandler;
 
     // STOMP 엔드포인트를 등록하는 메서드
     @Override
@@ -26,12 +31,12 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
         registry.setApplicationDestinationPrefixes("/pub"); // /pub/message로 메시지 전송 컨트롤러 라우팅 가능: 메시지 수신
     }
 
-/*    // 클라이언트 인바운드 채널을 구성하는 메서드
+    // 클라이언트 인바운드 채널을 구성하는 메서드
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         // stompHandler를 인터셉터로 등록하여 STOMP 메시지 핸들링을 수행
         registration.interceptors(stompHandler);
-    }*/
+    }
 
     // STOMP에서 64KB 이상의 데이터 전송을 못하는 문제 해결
     @Override
