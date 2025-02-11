@@ -1,11 +1,15 @@
 package com.rljj.chatservice.domain.chat.controller;
 
-import com.rljj.chatservice.domain.chat.dto.*;
+import com.rljj.chatservice.domain.chat.dto.ChatMessageListResponse;
+import com.rljj.chatservice.domain.chat.dto.ChatRoomRequest;
+import com.rljj.chatservice.domain.chat.dto.ChatRoomResponse;
+import com.rljj.chatservice.domain.chat.dto.Message;
 import com.rljj.chatservice.domain.chat.service.ChatService;
 import com.rljj.chatservice.global.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ChatController {
-    
+
     private final ChatService chatService;
 
     // 채팅방 만들기
@@ -24,6 +28,7 @@ public class ChatController {
         return ResponseEntity.ok().build();
     }
 
+    // TODO 응답 정리하기
     // 채팅방 리스트 조회하기
     @GetMapping("/rooms")
     public ResponseEntity<List<ChatRoomResponse>> getChatRoomList() {
@@ -32,7 +37,6 @@ public class ChatController {
     }
 
     // TODO 채팅방 삭제하기
-    // TODO 채팅방 접속 끊기
 
     // 채팅메시지 내역 조회하기
     @GetMapping("/rooms/{roomId}")
@@ -43,8 +47,8 @@ public class ChatController {
 
     // 채팅메시지 보내기
     @MessageMapping("/messages")
-    public void sendMessage(Message message) {
-        chatService.sendMessage(message);
+    public void sendMessage(Message message, Authentication authentication) {
+        chatService.sendMessage(message, authentication);
     }
 
 }

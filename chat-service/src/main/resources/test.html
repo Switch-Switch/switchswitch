@@ -13,24 +13,32 @@
 
 <script>
     function connectWebSocket() {
+        // 로컬 스토리지 깉은 데서.. JWT 토큰 가져오기
+        const token = 'jwt'; // localStorage.getItem('jwtToken');  // 예: localStorage 또는 쿠키에서 토큰 가져오기
+
         const socket = new SockJS("http://localhost:8085/chat");  // SockJS WebSocket 연결
         const stompClient = Stomp.over(socket);  // STOMP 프로토콜 사용
 
-        stompClient.connect({}, function (frame) {
-            console.log("Connected: " + frame);
+        stompClient.connect(
+            { 'Authorization': 'Bearer ' + token },  // Authorization 헤더에 토큰 포함
+            function (frame) {
+                console.log("Connected: " + frame);
 
-            // 메시지 구독 (예: /sub/1 채널)
-            stompClient.subscribe("/sub/1", function (message) {
-                console.log("Received: " + message.body);
-            });
+                // 메시지 구독 (예: /sub/1 채널)
+                stompClient.subscribe("/sub/1", function (message) {
+                    console.log("Received: " + message.body);
+                });
 
-            // 메시지 전송
-            stompClient.send("/pub/messages", {}, JSON.stringify({
-                chatNo: "1",
-                sender: "user1",
-                message: "Hello WebSocket!"
-            }));
-        });
+                // 메시지 전송
+                stompClient.send("/pub/messages", {}, JSON.stringify({
+                    chatRoomId: "1",
+                    message: "Hello WebSocket!"
+                }));
+            },
+            function (error) {
+                console.error("Error connecting: " + error);
+            }
+        );
     }
 </script>
 
