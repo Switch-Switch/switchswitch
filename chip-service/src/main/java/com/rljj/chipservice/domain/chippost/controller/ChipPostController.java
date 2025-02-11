@@ -49,6 +49,6 @@ public class ChipPostController {
                                            @PathVariable Long chipPostId) {
         Long memberId = Long.parseLong(userDetails.getUsername());
         postService.deletePost(memberId, chipPostId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
