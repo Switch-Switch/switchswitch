@@ -36,22 +36,9 @@ public class ChatService {
     }
 
     // 채팅방 리스트 조회
-    public List<ChatRoomResponse> getChatRoomList(Long memberId) {
+    public ChatRoomListResponse getChatRoomList(Long memberId) {
         List<ChatRoom> chatRoomList = chatRoomRepository.findChatRoomsByMemberId(memberId);
-
-        List<ChatRoomResponse> chatRoomResponseList = chatRoomList.stream()
-                .map(chatRoom -> new ChatRoomResponse(
-                        chatRoom.getId(),
-                        memberId,  // 현재 로그인한 사용자 ID
-                        chatRoom.getAuthor().getId().equals(memberId)
-                                ? chatRoom.getRequester().getId()  // 내가 author 상대방 = requester
-                                : chatRoom.getAuthor().getId(),     // 내가 requester 상대방 = author
-                        chatRoom.getChipPost().getId()
-                ))
-                .toList();
-
-        // TODO 다이나모 DB 조회해서 마지막 메시지 resposne에 넣어줘야 함
-        return chatRoomResponseList;
+        return new ChatRoomListResponse(ChatRoomDto.from(chatRoomList, memberId));
     }
 
     // 채팅메시지 내역 조회하기
