@@ -6,12 +6,15 @@ import com.rljj.chatservice.domain.chat.dto.ChatRoomRequest;
 import com.rljj.chatservice.domain.chat.dto.Message;
 import com.rljj.chatservice.domain.chat.service.ChatService;
 import com.rljj.chatservice.global.util.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequestMapping("/api/chat")
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +24,7 @@ public class ChatController {
 
     // 채팅방 만들기
     @PostMapping("/rooms")
-    public ResponseEntity<Void> createChatRoom(@RequestBody ChatRoomRequest request) {
+    public ResponseEntity<Void> createChatRoom(@RequestBody @Valid final ChatRoomRequest request) {
         chatService.makeChatRoom(SecurityUtils.getMemberId(), request);
         return ResponseEntity.ok().build();
     }
@@ -45,8 +48,8 @@ public class ChatController {
 
     // 채팅메시지 보내기
     @MessageMapping("/messages")
-    public void sendMessage(Message message, Authentication authentication) {
-        chatService.sendMessage(message, authentication);
+    public void sendMessage(Message message, @Header("Authorization") final String accessToken) {
+        chatService.sendMessage(message, accessToken);
     }
 
 }

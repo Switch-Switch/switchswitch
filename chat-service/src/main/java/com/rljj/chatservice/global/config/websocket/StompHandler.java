@@ -13,11 +13,6 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -71,14 +66,6 @@ public class StompHandler implements ChannelInterceptor {
         } catch (Exception e) {
             throw new AccessDeniedException("Access denied: Invalid token.");
         }
-
-        Long memberId = jwtProvider.parseMemberId(token);
-        UserDetails userDetails = createUserDetails(memberId);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        accessor.setUser(authentication);
     }
 
-    private UserDetails createUserDetails(Long memberId) {
-        return new User(String.valueOf(memberId), "", List.of(new SimpleGrantedAuthority("ROLE_USER")));
-    }
 }

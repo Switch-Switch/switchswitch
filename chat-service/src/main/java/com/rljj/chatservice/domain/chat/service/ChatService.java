@@ -5,11 +5,10 @@ import com.rljj.chatservice.domain.chat.model.ChatMessage;
 import com.rljj.chatservice.domain.chat.respository.ChatMessageRepository;
 import com.rljj.chatservice.domain.chat.respository.ChatRoomRepository;
 import com.rljj.chatservice.global.util.ConstantUtils;
+import com.rljj.switchswitchcommon.jwt.JwtProvider;
 import com.rljj.switchswitchentity.chat.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
 
+    private final JwtProvider jwtProvider;
     private final MessageSender sender;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
@@ -48,20 +48,29 @@ public class ChatService {
     }
 
     // 채팅메시지 보내기
-    public void sendMessage(Message message, Authentication authentication) {
+    public void sendMessage(Message message, String accessToken) {
 
-        // 1. message 객체에 필요한 정보 세팅
-        message.setMessageDetails(extractMemberId(authentication), LocalDateTime.now());
+        // 1. 토큰에서 memberId 추출
+        Long memberId = extractMemberIdFromToken(accessToken);
+        if (memberId == null) {
+            throw new IllegalArgumentException("Invalid or missing access token");
+        }
 
-        // 2. 메시지 전송
+        // 2. message 객체에 필요한 정보 세팅
+        message.setMessageDetails(memberId, LocalDateTime.now());
+
+        // 3. 메시지 전송
         sender.send(ConstantUtils.KAFKA_TOPIC, message);
 
-        // 3. dynamodb 저장
+        // 4. dynamodb 저장
         chatMessageRepository.saveChatMessage(message.toChatMessage());
     }
 
-    private Long extractMemberId(Authentication authentication) {
-        return Long.parseLong(((UserDetails) authentication.getPrincipal()).getUsername());
+    private Long extractMemberIdFromToken(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            return jwtProvider.parseMemberId(token.substring(7));
+        }
+        return null;
     }
 
 }

@@ -14,7 +14,7 @@
 <script>
     function connectWebSocket() {
         // 로컬 스토리지 깉은 데서.. JWT 토큰 가져오기
-        const token = 'jwt'; // localStorage.getItem('jwtToken');  // 예: localStorage 또는 쿠키에서 토큰 가져오기
+        const token = 'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzM5MjYyOTg3LCJpYXQiOjE3MzkyNjI2ODd9.tr-RkWkYYVvHdwQFaLu_5FBKdo1sQAXIt3fEebULNmU04bjbL5v_EOuHnE2UvHja'; // 예: localStorage 또는 쿠키에서 토큰 가져오기
 
         const socket = new SockJS("http://localhost:8085/chat");  // SockJS WebSocket 연결
         const stompClient = Stomp.over(socket);  // STOMP 프로토콜 사용
@@ -29,10 +29,15 @@
                     console.log("Received: " + message.body);
                 });
 
+                // 헤더에 Authorization 토큰 추가
+                const headers = {
+                    'Authorization': 'Bearer ' + token
+                };
+
                 // 메시지 전송
-                stompClient.send("/pub/messages", {}, JSON.stringify({
-                    chatRoomId: "1",
-                    message: "Hello WebSocket!"
+                stompClient.send("/pub/messages", headers, JSON.stringify({
+                    chatRoomId: "2",
+                    message: "Hello WebSocket!!!!!!!!!!"
                 }));
             },
             function (error) {
