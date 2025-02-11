@@ -1,6 +1,7 @@
 package com.rljj.chatservice.domain.chat.dto;
 
 import com.rljj.chatservice.domain.chat.model.ChatMessage;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,7 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message implements Serializable {
     private String id;
+
+    @NotNull
     private Long chatRoomId;
+
+    @NotNull
     private String message;
 
     private Long senderId;

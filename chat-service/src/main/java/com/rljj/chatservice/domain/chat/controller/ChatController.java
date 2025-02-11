@@ -48,7 +48,7 @@ public class ChatController {
 
     // 채팅메시지 보내기
     @MessageMapping("/messages")
-    public void sendMessage(Message message, @Header("Authorization") final String accessToken) {
+    public void sendMessage(@Valid Message message, @Header("Authorization") final String accessToken) {
         chatService.sendMessage(message, accessToken);
     }
 
