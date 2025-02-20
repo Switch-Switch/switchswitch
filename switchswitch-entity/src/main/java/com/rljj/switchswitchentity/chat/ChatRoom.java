@@ -9,11 +9,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class ChatRoom extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
@@ -21,14 +20,26 @@ public class ChatRoom extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Member creatorUser;
+    private Member author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Member interestedUser;
+    private Member requester;
 
     @Enumerated(EnumType.STRING)
     @NotNull
     private ChatRoomStatus status;
+
+    public static ChatRoom create(ChipPost chipPost, Member author, Member requester) {
+        return new ChatRoom(chipPost, author, requester);
+    }
+
+    @Builder
+    private ChatRoom(ChipPost chipPost, Member author, Member requester) {
+        this.chipPost = chipPost;
+        this.author = author;
+        this.requester = requester;
+        this.status = ChatRoomStatus.ACTIVE;
+    }
     
 }
